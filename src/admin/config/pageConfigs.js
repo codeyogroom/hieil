@@ -1,4 +1,5 @@
 import React from 'react';
+import * as FaIcons from 'react-icons/fa';
 import { FaBus, FaCar, FaCheck, FaCommentAlt, FaDownload, FaEdit, FaEnvelope, FaExternalLinkAlt, FaEye, FaFileAlt, FaFilePdf, FaImages, FaList, FaMoneyBillAlt, FaPhone, FaPhoneAlt, FaPlane, FaSave, FaStar, FaStore, FaTh, FaTimes, FaTrash, FaTrashAlt, FaTruck, FaUsers, FaWhatsapp } from 'react-icons/fa';
 
 
@@ -1450,8 +1451,8 @@ export const pageConfigs = [
           type: 'icon-picker', 
           formLabel: 'Select Icon',
           render: (val) => {
-            const IconComp = val && FaIcons[val] ? FaIcons[val] : FaFileAlt;
-            return React.createElement(IconComp, { style: { color: '#f59e0b', fontSize: '18px' } }) 
+            const IconComp = (val && FaIcons && FaIcons[val]) ? FaIcons[val] : (FaFileAlt || FaIcons.FaFileAlt);
+            return IconComp ? React.createElement(IconComp, { style: { color: '#f59e0b', fontSize: '18px' } }) : null;
           }
         },
         { key: 'title', label: 'Title', formLabel: 'Title', placeholder: 'Enter Title', minWidth: '150px' },
