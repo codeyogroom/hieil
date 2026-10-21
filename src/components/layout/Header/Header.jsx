@@ -208,6 +208,7 @@ const Header = () => {
 
       <div className="flex items-center gap-4">
         <Link to="/account" className="hidden lg:flex items-center justify-center gap-2 border border-[#c8956c] text-[#c8956c] py-2 px-4 rounded-full text-[12px] tracking-[1px] hover:bg-[#c8956c] hover:text-[#110e0c] transition-all"><User size={16} />{user ? user.name.split(' ')[0] : 'LOGIN'}</Link>
+        <Link to="/membership" className="hidden lg:flex items-center justify-center border border-[#c8956c] text-[#c8956c] py-3 px-5 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]">MEMBERSHIP</Link>
         <button className="hidden lg:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => setIsQuoteModalOpen(true)}>GET QUOTE</button>
         <button className="block lg:hidden bg-transparent border-none text-[#c8956c] cursor-pointer p-1" onClick={toggleMobileMenu} aria-label="Toggle menu">
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -304,7 +305,8 @@ const Header = () => {
               </div>
             ))}
             <Link to="/account" className="block w-full border border-[#c8956c] text-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-5 text-center transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]" onClick={() => setIsMobileMenuOpen(false)}><div className="flex items-center justify-center gap-2"><User size={16} />{user ? user.name.split(' ')[0] : 'LOGIN / REGISTER'}</div></Link>
-            <button className="bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-5 text-center transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => { setIsQuoteModalOpen(true); setIsMobileMenuOpen(false); }}>GET QUOTE</button>
+            <Link to="/membership" className="block w-full border border-[#c8956c] text-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-3 text-center transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]" onClick={() => setIsMobileMenuOpen(false)}>MEMBERSHIP</Link>
+            <button className="bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-3 text-center transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => { setIsQuoteModalOpen(true); setIsMobileMenuOpen(false); }}>GET QUOTE</button>
           </div>
         </div>
       )}

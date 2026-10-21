@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, User, Heart, FileText, CheckCircle } from 'lucide-react';
+import { LogOut, User, Heart, FileText, CheckCircle, Crown, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
 import api from '../../config/api';
 import Swal from 'sweetalert2';
 
@@ -11,6 +11,7 @@ const UserDashboard = () => {
   const [inquiries, setInquiries] = useState([]);
   const [quotations, setQuotations] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [memberships, setMemberships] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
@@ -70,6 +71,7 @@ const UserDashboard = () => {
     { id: 'quotations', label: 'My Quotations', icon: <FileText size={18} /> },
     { id: 'wishlist', label: 'Wishlist', icon: <Heart size={18} /> },
     { id: 'orders', label: 'Orders', icon: <CheckCircle size={18} /> },
+    { id: 'membership', label: 'My Membership', icon: <Crown size={18} /> },
   ];
 
   return (
@@ -228,6 +230,146 @@ const UserDashboard = () => {
             </div>
           )}
           
+
+          {/* MEMBERSHIP TAB */}
+          {activeTab === 'membership' && (
+            <div>
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div>
+                  <h3 className="text-2xl font-serif text-[#c8956c] m-0">My Importer Membership</h3>
+                  <p className="text-[#888] text-sm mt-1">Manage and track your sourcing membership privileges and applications.</p>
+                </div>
+                <Link
+                  to="/membership"
+                  className="bg-[#c8956c] text-[#15110F] font-bold text-xs uppercase tracking-wider py-2.5 px-5 rounded hover:bg-[#e2c994] transition-all flex items-center gap-1.5"
+                >
+                  <Sparkles size={14} /> Explore All Plans
+                </Link>
+              </div>
+
+              {dataLoading ? (
+                <div className="flex justify-center py-10"><div className="w-8 h-8 border-4 border-[#c8956c] border-t-transparent rounded-full animate-spin"></div></div>
+              ) : (
+                <div className="flex flex-col gap-6">
+                  {/* Check for active membership */}
+                  {(() => {
+                    const activeSub = memberships.find(m => m.status === 'Active');
+                    if (activeSub) {
+                      return (
+                        <div className="bg-gradient-to-r from-[#1c1814] via-[#241e19] to-[#1c1814] border-2 border-[#c8956c] p-6 rounded-2xl relative shadow-[0_0_30px_rgba(200,149,108,0.15)]">
+                          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 rounded-full bg-[#c8956c]/20 border border-[#c8956c] flex items-center justify-center text-[#c8956c]">
+                                <Crown size={24} />
+                              </div>
+                              <div>
+                                <span className="bg-[#c8956c] text-[#15110F] text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full inline-block mb-1">
+                                  ACTIVE MEMBER
+                                </span>
+                                <h4 className="font-serif text-2xl text-white font-medium m-0">{activeSub.planName}</h4>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-xl font-bold text-[#c8956c]">{activeSub.price}</div>
+                              <div className="text-xs text-[#888]">{activeSub.duration}</div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-[#2c241c] text-sm">
+                            <div>
+                              <span className="text-xs text-[#888] block">Start Date</span>
+                              <span className="text-white font-medium">{activeSub.startDate ? new Date(activeSub.startDate).toLocaleDateString() : new Date(activeSub.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <div>
+                              <span className="text-xs text-[#888] block">End / Renewal Date</span>
+                              <span className="text-white font-medium">{activeSub.endDate ? new Date(activeSub.endDate).toLocaleDateString() : 'Active Ongoing'}</span>
+                            </div>
+                            <div>
+                              <span className="text-xs text-[#888] block">Support Channel</span>
+                              <a 
+                                href="https://wa.me/919050001972?text=Hi!%20I%20am%20an%20active%20HIEIL%20member%20inquiring%20about%20my%20sourcing." 
+                                target="_blank" 
+                                rel="noreferrer"
+                                className="text-[#25D366] font-bold text-xs inline-flex items-center gap-1 hover:underline mt-0.5"
+                              >
+                                Priority WhatsApp Sourcing
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+
+                  {/* All applications / enquiries list */}
+                  <div>
+                    <h4 className="text-lg font-serif text-white mb-3">Membership Inquiries & Applications</h4>
+                    {memberships.length === 0 ? (
+                      <div className="bg-[#15110F] border border-[#2c241c] p-8 rounded-xl text-center">
+                        <Crown size={36} className="mx-auto text-[#c8956c] mb-3 opacity-60" />
+                        <p className="text-white font-medium mb-1">No Membership Subscription Found</p>
+                        <p className="text-[#888] text-sm max-w-md mx-auto mb-5">
+                          Join HIEIL's Importer Membership to access verified manufacturer pricing, custom handicraft sourcing, and transparent quotation coordination.
+                        </p>
+                        <Link
+                          to="/membership"
+                          className="inline-block bg-[#c8956c] text-[#15110F] font-bold text-xs uppercase tracking-wider py-3 px-6 rounded hover:bg-[#e2c994] transition-all"
+                        >
+                          View Membership Plans & Apply
+                        </Link>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {memberships.map((sub) => (
+                          <div key={sub._id} className="bg-[#15110F] border border-[#2c241c] p-5 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-[#c8956c]/40 transition-colors">
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-serif text-lg text-white font-medium">{sub.planName}</span>
+                                <span className="text-xs text-[#888]">&middot; {sub.duration || 'Plan'}</span>
+                                {sub.price && <span className="text-xs text-[#c8956c] font-bold">({sub.price})</span>}
+                              </div>
+                              <div className="text-xs text-[#888]">
+                                Applied on {new Date(sub.createdAt).toLocaleDateString()}
+                                {sub.companyName && <span> &middot; {sub.companyName}</span>}
+                                {sub.targetMarket && <span> &middot; Market: {sub.targetMarket}</span>}
+                              </div>
+                              {sub.notes && (
+                                <div className="text-xs text-[#c8956c] bg-[#c8956c]/10 p-2 rounded mt-2 border border-[#c8956c]/20">
+                                  <strong>HIEIL Note:</strong> {sub.notes}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                              <span className={`text-xs px-3 py-1 rounded-full uppercase font-bold tracking-wider ${
+                                sub.status === 'Active' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                sub.status === 'Contacted' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
+                                sub.status === 'Expired' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                                sub.status === 'Rejected' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                              }`}>
+                                {sub.status || 'Pending'}
+                              </span>
+                              <a
+                                href="https://wa.me/919050001972?text=Hi!%20I%20have%20an%20inquiry%20regarding%20my%20membership%20application."
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs text-[#888] hover:text-[#c8956c] underline"
+                              >
+                                Need Help?
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* ORDERS TAB */}
           {activeTab === 'orders' && (
             <div>

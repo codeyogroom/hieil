@@ -126,7 +126,9 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
       'retailer-system/invoices': '/retailer/invoices',
       'retailer-system/payments': '/retailer/payments',
       'retailer-system/shipping': '/retailer/shipping',
-      'submissions/feedback': '/submissions/feedback'
+      'submissions/feedback': '/submissions/feedback',
+      'membership-plans': '/subscription-plans',
+      'membership-enquiries': '/subscription-enquiries'
     };
 
     if (exactMap[path]) return exactMap[path];

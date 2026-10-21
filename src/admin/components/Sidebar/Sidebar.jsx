@@ -7,7 +7,7 @@ import {
   FaImages, FaQuestionCircle, FaCertificate, FaSlidersH,
   FaEnvelope, FaInfoCircle, FaDownload, FaUserCog,
   FaBoxOpen, FaStore, FaLayerGroup, FaShippingFast, FaTruck,
-  FaMapMarkerAlt, FaUserShield, FaChevronDown, FaChevronRight, FaCog
+  FaMapMarkerAlt, FaUserShield, FaChevronDown, FaChevronRight, FaCog, FaCrown
 } from 'react-icons/fa';
 
 const SidebarItem = ({ to, icon, label, exact, children, isSidebarOpen }) => {
@@ -140,6 +140,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                  {to: '/vendor-management/orders', label: 'Vendor Orders'},
                  {to: '/vendor-management/report', label: 'Vendor Report'},
                  {to: '/vendor-management/payout', label: 'Vendor Payout'}
+               ]}
+            </SidebarItem>}
+            {hasPermission("Membership") && <SidebarItem isSidebarOpen={isOpen} icon={FaCrown} label="Membership">
+               {[
+                 {to: '/membership-plans', label: 'Membership Plans'},
+                 {to: '/membership-enquiries', label: 'Membership Enquiries'}
                ]}
             </SidebarItem>}
             {hasPermission("Inquiry System") && <SidebarItem isSidebarOpen={isOpen} icon={FaBoxOpen} label="Inquiry System">

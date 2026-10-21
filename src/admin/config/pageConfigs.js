@@ -2487,6 +2487,76 @@ export const pageConfigs = [
       )
     }, 
     data: [] 
+  },
+  {
+    path: 'membership-plans',
+    title: 'Membership Plans',
+    singularTitle: 'Membership Plan',
+    breadcrumbParent: 'Membership',
+    formTitleAdd: 'Add Membership Plan',
+    formTitleEdit: 'Edit Membership Plan',
+    formCardTitle: 'MEMBERSHIP PLAN DETAILS',
+    columns: {
+      title: 'MEMBERSHIP PLANS',
+      addButtonText: 'Add New Plan',
+      headers: [
+        { key: 'order', label: 'Order', formLabel: 'Display Order (1, 2, 3...)', type: 'number', placeholder: '1' },
+        { key: 'name', label: 'Plan Name', formLabel: 'Plan Name *', placeholder: 'e.g. HIEIL Essential', minWidth: '160px' },
+        { key: 'duration', label: 'Duration', formLabel: 'Duration *', placeholder: 'e.g. 3 months, 6 months, 12 months' },
+        { key: 'price', label: 'Price', formLabel: 'Price *', placeholder: 'e.g. $1,499' },
+        { key: 'originalPrice', label: 'Original Price', formLabel: 'Original Price (for Strikethrough/Offer)', placeholder: 'e.g. $1,799' },
+        { key: 'offerBadge', label: 'Offer Badge', formLabel: 'Offer Badge / Discount Tag', placeholder: 'e.g. Save $300 or 20% OFF' },
+        { key: 'isPopular', label: 'Popular?', type: 'select', options: [{ value: true, label: 'Yes (Highlight Card)' }, { value: false, label: 'No' }], formLabel: 'Mark as Popular Plan?' },
+        { key: 'popularTag', label: 'Popular Tag', formLabel: 'Popular Tag Text', placeholder: 'Most Popular' },
+        { key: 'targetAudience', label: 'Target Audience', type: 'textarea', formLabel: 'Target Audience / For Whom', placeholder: 'e.g. For new importers, retailers...' },
+        { key: 'extraHeader', label: 'Extra Header', formLabel: 'Extra Header Subtitle', placeholder: 'e.g. Everything in Essential, plus' },
+        { key: 'features', label: 'Features (1 per line)', type: 'textarea', formLabel: 'Features List (Enter each feature on a new line)', placeholder: 'Feature 1\nFeature 2\nFeature 3' },
+        { key: 'promise', label: 'Promise Quote', formLabel: 'Bottom Promise Quote', placeholder: 'e.g. Start sourcing without building a supplier network from scratch.' },
+        { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive'], formLabel: 'Status' }
+      ]
+    },
+    data: []
+  },
+  {
+    path: 'membership-enquiries',
+    title: 'Membership Enquiries',
+    singularTitle: 'Membership Enquiry',
+    breadcrumbParent: 'Membership',
+    formTitleAdd: 'Add Membership Enquiry',
+    formTitleEdit: 'Edit Membership Enquiry',
+    formCardTitle: 'MEMBERSHIP ENQUIRY DETAILS',
+    columns: {
+      title: 'MEMBERSHIP ENQUIRIES',
+      addButtonText: 'Add Enquiry',
+      headers: [
+        { key: 'createdAt', label: 'Date', hideInForm: true, render: (val) => val ? new Date(val).toLocaleDateString() : 'N/A' },
+        { key: 'name', label: 'Client Name', formLabel: 'Client Name *', placeholder: 'Enter Client Name' },
+        { key: 'email', label: 'Email', formLabel: 'Email *', placeholder: 'Enter Email' },
+        { key: 'phone', label: 'Phone', formLabel: 'Phone / WhatsApp', placeholder: 'Enter Phone' },
+        { key: 'companyName', label: 'Company', formLabel: 'Company / Brand Name', placeholder: 'Enter Company' },
+        { key: 'planName', label: 'Plan', formLabel: 'Plan Selected', placeholder: 'e.g. HIEIL Business' },
+        { key: 'duration', label: 'Duration', formLabel: 'Duration', placeholder: 'e.g. 6 months' },
+        { key: 'price', label: 'Price', formLabel: 'Price', placeholder: 'e.g. $2,499' },
+        { key: 'targetMarket', label: 'Market', formLabel: 'Target Market', placeholder: 'e.g. USA, Europe' },
+        { key: 'expectedOrderSize', label: 'Order Size', formLabel: 'Expected Order Size' },
+        { key: 'message', label: 'Requirements / Message', type: 'textarea', formLabel: 'Message / Sourcing Requirements' },
+        { 
+          key: 'status', 
+          label: 'Status', 
+          type: 'select', 
+          options: ['Pending', 'Contacted', 'Active', 'Rejected', 'Expired'], 
+          formLabel: 'Status',
+          render: (val) => {
+            const color = val === 'Active' ? '#22c55e' : (val === 'Contacted' ? '#3b82f6' : (val === 'Pending' ? '#eab308' : '#ef4444'));
+            return React.createElement('span', { style: { backgroundColor: color, color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' } }, val || 'Pending');
+          }
+        },
+        { key: 'startDate', label: 'Start Date', type: 'date', formLabel: 'Membership Start Date' },
+        { key: 'endDate', label: 'End Date', type: 'date', formLabel: 'Membership Expiry Date' },
+        { key: 'notes', label: 'Admin Notes', type: 'textarea', formLabel: 'Internal Notes / Note to Client' }
+      ]
+    },
+    data: []
   }
 ];
 

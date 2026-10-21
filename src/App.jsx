@@ -26,6 +26,7 @@ const Gallery = lazy(() => import('./pages/Gallery/Gallery'));
 const Testimonials = lazy(() => import('./pages/Testimonials/Testimonials'));
 const AuthPage = lazy(() => import('./pages/Auth/AuthPage'));
 const UserDashboard = lazy(() => import('./pages/Account/UserDashboard'));
+const Membership = lazy(() => import('./pages/Membership/Membership'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService/TermsOfService'));
 const LegalInfo = lazy(() => import('./pages/LegalInfo/LegalInfo'));
@@ -122,6 +123,8 @@ function App() {
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/account" element={<UserDashboard />} />
+              <Route path="/membership" element={<Membership />} />
+              <Route path="/subscription" element={<Navigate to="/membership" replace />} />
 
 
               <Route path="/terms-of-service" element={<TermsOfService />} />
