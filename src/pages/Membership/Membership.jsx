@@ -144,6 +144,36 @@ const Membership = () => {
     fetchPlans();
   }, []);
 
+  const getPerDayCost = (plan) => {
+    if (plan.perDayCost) {
+      return plan.perDayCost.replace(/\/.*$/, '').trim();
+    }
+    
+    const numPrice = parseFloat(String(plan.price || '').replace(/[^0-9.]/g, ''));
+    if (!numPrice || isNaN(numPrice)) return null;
+
+    const dur = String(plan.duration || '').toLowerCase();
+    let days = 30;
+    if (dur.includes('12 month') || dur.includes('1 year') || dur.includes('annual')) {
+      days = 365;
+    } else if (dur.includes('6 month')) {
+      days = 180;
+    } else if (dur.includes('3 month')) {
+      days = 90;
+    } else if (dur.includes('month')) {
+      const match = dur.match(/(\d+)\s*month/);
+      if (match) days = parseInt(match[1], 10) * 30;
+    } else if (dur.includes('day')) {
+      const match = dur.match(/(\d+)\s*day/);
+      if (match) days = parseInt(match[1], 10);
+    }
+
+    const perDay = (numPrice / days).toFixed(2);
+    const symbol = String(plan.price || '').trim().startsWith('$') ? '$' : 
+                   String(plan.price || '').includes('₹') ? '₹' : '$';
+    return symbol + perDay;
+  };
+
   const handleOpenModal = (plan) => {
     setSelectedPlanForModal(plan);
     setFormData(prev => ({
@@ -352,7 +382,7 @@ const Membership = () => {
                   </div>
                   
                   {/* Pricing */}
-                  <div className="flex items-baseline gap-2 mb-4">
+                  <div className="flex items-baseline gap-2 mb-1">
                     <span className="text-3xl md:text-4xl font-serif font-normal text-[#c8956c] tracking-normal">
                       {plan.price}
                     </span>
@@ -362,6 +392,14 @@ const Membership = () => {
                       </span>
                     )}
                   </div>
+
+                  {/* Per Day Cost */}
+                  {getPerDayCost(plan) && (
+                    <div className="text-[13px] text-[#b5aaa0] mb-4 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#c8956c]"></span>
+                      <span>Just <strong className="text-white font-bold">{getPerDayCost(plan)}</strong> / day</span>
+                    </div>
+                  )}
 
                   <p className="text-[#b5aaa0] leading-[1.6] text-[14px] mb-6 min-h-[44px]">
                     {plan.targetAudience}

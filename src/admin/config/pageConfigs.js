@@ -2505,6 +2505,7 @@ export const pageConfigs = [
         { key: 'duration', label: 'Duration', formLabel: 'Duration *', placeholder: 'e.g. 3 months, 6 months, 12 months' },
         { key: 'price', label: 'Price', formLabel: 'Price *', placeholder: 'e.g. $1,499' },
         { key: 'originalPrice', label: 'Original Price', formLabel: 'Original Price (for Strikethrough/Offer)', placeholder: 'e.g. $1,799' },
+        { key: 'perDayCost', label: 'Per Day Cost', formLabel: 'Per Day Cost (e.g. $16.65 / day or leave blank for auto)', placeholder: 'e.g. $16.65 / day' },
         { key: 'offerBadge', label: 'Offer Badge', formLabel: 'Offer Badge / Discount Tag', placeholder: 'e.g. Save $300 or 20% OFF' },
         { key: 'isPopular', label: 'Popular?', type: 'select', options: [{ value: true, label: 'Yes (Highlight Card)' }, { value: false, label: 'No' }], formLabel: 'Mark as Popular Plan?' },
         { key: 'popularTag', label: 'Popular Tag', formLabel: 'Popular Tag Text', placeholder: 'Most Popular' },
