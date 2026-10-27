@@ -2523,6 +2523,7 @@ export const pageConfigs = [
     title: 'Subscription Enquiries',
     singularTitle: 'Subscription Enquiry',
     breadcrumbParent: 'Subscription',
+    apiEndpoint: '/subscription-enquiries',
     formTitleAdd: 'Add Subscription Enquiry',
     formTitleEdit: 'Edit Subscription Enquiry',
     formCardTitle: 'SUBSCRIPTION ENQUIRY DETAILS',
@@ -2535,7 +2536,56 @@ export const pageConfigs = [
         { key: 'email', label: 'Email', formLabel: 'Email *', placeholder: 'Enter Email' },
         { key: 'phone', label: 'Phone', formLabel: 'Phone / WhatsApp', placeholder: 'Enter Phone' },
         { key: 'companyName', label: 'Company', formLabel: 'Company / Brand Name', placeholder: 'Enter Company' },
-        { key: 'planName', label: 'Plan', formLabel: 'Plan Selected', placeholder: 'e.g. HIEIL Business' },
+        { 
+          key: 'planName', 
+          label: 'Plan', 
+          formLabel: 'Plan Selected', 
+          placeholder: 'e.g. HIEIL Business',
+          render: (val, row) => {
+            const planIdVal = row.planId ? (typeof row.planId === 'object' ? row.planId._id : row.planId) : null;
+            const planNameVal = val || (row.planId && typeof row.planId === 'object' ? row.planId.name : '');
+            const hasPlan = Boolean(planIdVal) || (Boolean(planNameVal) && planNameVal.trim() !== '' && planNameVal !== 'No Plan' && planNameVal !== 'General Consultation');
+
+            if (!hasPlan) {
+              return React.createElement('span', {
+                style: {
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  color: '#dc2626',
+                  backgroundColor: '#fee2e2',
+                  border: '1px solid #fecaca'
+                }
+              }, 'No Product');
+            }
+
+            return React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '4px' } },
+              React.createElement('div', { style: { fontWeight: '600', color: '#111827', fontSize: '13px' } }, planNameVal || 'Subscription Plan'),
+              React.createElement('button', {
+                type: 'button',
+                style: {
+                  padding: '3px 8px',
+                  fontSize: '11px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  backgroundColor: '#fdf4ec',
+                  color: '#c8956c',
+                  border: '1px solid #e8cdb5',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  width: 'fit-content'
+                },
+                onClick: () => window.open('/subscription#plans', '_blank')
+              }, React.createElement(FaExternalLinkAlt, { style: { fontSize: '10px' } }), 'View Plan')
+            );
+          }
+        },
         { key: 'duration', label: 'Duration', formLabel: 'Duration', placeholder: 'e.g. 6 months' },
         { key: 'price', label: 'Price', formLabel: 'Price', placeholder: 'e.g. $2,499' },
         { key: 'targetMarket', label: 'Market', formLabel: 'Target Market', placeholder: 'e.g. USA, Europe' },

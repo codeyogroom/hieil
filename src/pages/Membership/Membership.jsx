@@ -94,6 +94,10 @@ const Membership = () => {
   // Modal State
   const [selectedPlanForModal, setSelectedPlanForModal] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [quickEmail, setQuickEmail] = useState('');
+  const [quickName, setQuickName] = useState('');
+  const [quickPhone, setQuickPhone] = useState('');
+  const [isQuickSubmitting, setIsQuickSubmitting] = useState(false);
 
   // Enquiry Form State
   const [formData, setFormData] = useState({
@@ -121,6 +125,9 @@ const Membership = () => {
         phone: user.phone || prev.phone,
         companyName: user.companyName || prev.companyName
       }));
+      if (user.email) setQuickEmail(user.email);
+      if (user.name) setQuickName(user.name);
+      if (user.phone) setQuickPhone(user.phone);
     }
   }, [user]);
 
@@ -174,15 +181,80 @@ const Membership = () => {
     return symbol + perDay;
   };
 
-  const handleOpenModal = (plan) => {
+  const handleOpenModal = (plan = null) => {
     setSelectedPlanForModal(plan);
-    setFormData(prev => ({
-      ...prev,
-      planName: plan.name,
-      duration: plan.duration,
-      price: plan.price
-    }));
+    setQuickEmail(user?.email || '');
+    setQuickName(user?.name || '');
+    setQuickPhone(user?.phone || '');
+    if (plan) {
+      setFormData(prev => ({
+        ...prev,
+        planName: plan.name,
+        planId: plan._id || null,
+        duration: plan.duration,
+        price: plan.price
+      }));
+    }
     setIsModalOpen(true);
+  };
+
+  const handleQuickSubmit = async (e) => {
+    e.preventDefault();
+    if (!quickEmail) {
+      Swal.fire({
+        title: 'Email Required',
+        text: 'Please enter your email address.',
+        icon: 'warning',
+        background: '#1C1713',
+        color: '#fff',
+        confirmButtonColor: '#c8956c'
+      });
+      return;
+    }
+
+    setIsQuickSubmitting(true);
+    try {
+      const isPlan = Boolean(selectedPlanForModal);
+      const payload = {
+        email: quickEmail.trim(),
+        name: quickName.trim() || (user?.name || quickEmail.split('@')[0]),
+        phone: quickPhone.trim() || (user?.phone || ''),
+        planId: isPlan ? (selectedPlanForModal._id || null) : null,
+        planName: isPlan ? selectedPlanForModal.name : '',
+        duration: isPlan ? (selectedPlanForModal.duration || '') : '',
+        price: isPlan ? (selectedPlanForModal.price || '') : '',
+        message: isPlan ? `Quick direct inquiry for ${selectedPlanForModal.name}` : 'Direct consultation request from website',
+        type: 'quick',
+        userId: user ? (user.id || user._id) : undefined
+      };
+
+      await api.post('/subscription-enquiries', payload);
+
+      Swal.fire({
+        title: isPlan ? 'Inquiry Received!' : 'Consultation Requested!',
+        html: isPlan 
+          ? `Thank you! Your inquiry for <b>${selectedPlanForModal.name}</b> has been received. Our team will contact you at <b>${quickEmail}</b> shortly.`
+          : `Thank you! Your sourcing consultation request has been received. Our team will contact you at <b>${quickEmail}</b> shortly.`,
+        icon: 'success',
+        confirmButtonColor: '#c8956c',
+        background: '#1C1713',
+        color: '#ffffff'
+      });
+
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Error submitting subscription enquiry:', err);
+      Swal.fire({
+        title: 'Submission Failed',
+        text: err.response?.data?.message || 'Something went wrong. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#c8956c',
+        background: '#1C1713',
+        color: '#ffffff'
+      });
+    } finally {
+      setIsQuickSubmitting(false);
+    }
   };
 
   const handleFormChange = (e) => {
@@ -192,8 +264,9 @@ const Membership = () => {
       setFormData(prev => ({
         ...prev,
         planName: value,
-        duration: found ? found.duration : prev.duration,
-        price: found ? found.price : prev.price
+        planId: found ? (found._id || null) : null,
+        duration: found ? found.duration : '',
+        price: found ? found.price : ''
       }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
@@ -216,22 +289,28 @@ const Membership = () => {
 
     setSubmitting(true);
     try {
+      const found = plans.find(p => p.name === formData.planName);
+      const isGeneral = !formData.planName || formData.planName === 'General Consultation' || formData.planName === 'Custom Sourcing Requirement';
+
       const payload = {
         ...formData,
-        userId: user ? user.id : undefined
+        planId: isGeneral ? null : (found ? found._id : (formData.planId || null)),
+        planName: isGeneral ? '' : formData.planName,
+        duration: isGeneral ? '' : (found ? found.duration : formData.duration),
+        price: isGeneral ? '' : (found ? found.price : formData.price),
+        userId: user ? (user.id || user._id) : undefined,
+        type: 'detailed'
       };
       await api.post('/subscription-enquiries', payload);
       
       Swal.fire({
         title: 'Application Received!',
-        html: `Thank you <b>${formData.name}</b>. Your subscription enquiry for <b>${formData.planName}</b> has been received. Our international sourcing director will contact you within 24 hours.`,
+        html: `Thank you <b>${formData.name}</b>. Your sourcing application ${formData.planName ? `for <b>${formData.planName}</b>` : ''} has been received. Our international sourcing director will contact you within 24 hours.`,
         icon: 'success',
         confirmButtonColor: '#c8956c',
         background: '#1C1713',
         color: '#ffffff'
       });
-
-      if (isModalOpen) setIsModalOpen(false);
 
       // Reset form while keeping user contact info
       setFormData(prev => ({
@@ -279,12 +358,13 @@ const Membership = () => {
               >
                 View Subscription Plans
               </a>
-              <a 
-                href="#contact" 
-                className="inline-block bg-transparent text-[#c8956c] border border-[#4a3e35] py-3.5 px-8 text-[12px] tracking-[2px] uppercase font-bold transition-all duration-300 hover:border-[#c8956c] hover:bg-[rgba(194,163,115,0.08)] rounded-[6px]"
+              <button 
+                type="button"
+                onClick={() => handleOpenModal(null)} 
+                className="inline-block bg-transparent text-[#c8956c] border border-[#4a3e35] py-3.5 px-8 text-[12px] tracking-[2px] uppercase font-bold transition-all duration-300 hover:border-[#c8956c] hover:bg-[rgba(194,163,115,0.08)] rounded-[6px] cursor-pointer"
               >
                 Request Consultation
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -575,6 +655,7 @@ const Membership = () => {
                       className="appearance-none cursor-pointer w-full p-[15px] border border-[#4a3e35] rounded-[10px] bg-[rgba(21,17,15,0.8)] text-[1rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] focus:shadow-[0_0_15px_rgba(194,163,115,0.1)]"
                       required
                     >
+                      <option value="" className="bg-[#15110F] text-white">General Sourcing Consultation (No Specific Plan)</option>
                       {plans.map(p => (
                         <option key={p._id || p.name} value={p.name} className="bg-[#15110F] text-white">
                           {p.name} ({p.duration} - {p.price})
@@ -721,102 +802,120 @@ const Membership = () => {
         </div>
       </section>
 
-      {/* POPUP MODAL FOR QUICK PLAN ENQUIRY */}
-      {isModalOpen && selectedPlanForModal && (
+      {/* POPUP MODAL FOR QUICK SUBSCRIPTION / CONSULTATION ENQUIRY */}
+      {isModalOpen && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-          <div className="bg-[#1C1713] border border-[#c8956c] p-6 sm:p-8 w-full max-w-lg relative rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#1C1713] border border-[#c8956c] p-6 sm:p-8 w-full max-w-md relative rounded-[20px] shadow-[0_10px_50px_rgba(0,0,0,0.85)] max-h-[90vh] overflow-y-auto">
             <button 
               className="absolute top-5 right-5 text-[#8c8279] hover:text-[#c8956c] transition-colors p-1"
               onClick={() => setIsModalOpen(false)}
+              type="button"
             >
               <X size={24} />
             </button>
 
             <div className="mb-6">
-              <span className="text-[#c8956c] text-xs uppercase tracking-[2px] font-bold block mb-1">Subscription Application</span>
-              <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white uppercase tracking-[1px]">{selectedPlanForModal.name}</h3>
-              <div className="text-[#b5aaa0] text-sm mt-1">
-                Duration: <span className="text-white font-medium">{selectedPlanForModal.duration}</span> &middot; Investment: <span className="text-[#c8956c] font-bold">{selectedPlanForModal.price}</span>
-              </div>
+              {selectedPlanForModal ? (
+                <>
+                  <span className="text-[#c8956c] text-xs uppercase tracking-[2px] font-bold block mb-1">
+                    Subscription Plan Inquiry
+                  </span>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white uppercase tracking-[1px]">
+                    {selectedPlanForModal.name}
+                  </h3>
+                  <div className="text-[#b5aaa0] text-sm mt-1 flex flex-wrap items-center gap-2">
+                    <span>Duration: <strong className="text-white">{selectedPlanForModal.duration}</strong></span>
+                    <span>&middot;</span>
+                    <span>Price: <strong className="text-[#c8956c]">{selectedPlanForModal.price}</strong></span>
+                    {getPerDayCost(selectedPlanForModal) && (
+                      <span className="text-xs text-[#8c8279]">({getPerDayCost(selectedPlanForModal)} / day)</span>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="text-[#c8956c] text-xs uppercase tracking-[2px] font-bold block mb-1">
+                    Direct Consultation
+                  </span>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white uppercase tracking-[1px]">
+                    Request Sourcing Consultation
+                  </h3>
+                  <p className="text-[#b5aaa0] text-sm mt-1">
+                    Connect directly with our international handicraft export & sourcing director.
+                  </p>
+                </>
+              )}
             </div>
 
-            <form onSubmit={handleSubmitEnquiry} className="flex flex-col gap-4">
+            <form onSubmit={handleQuickSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="font-medium mb-[6px] text-white text-[0.85rem] tracking-[1px] uppercase block">Your Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleFormChange}
-                  required
-                  placeholder="Full name"
-                  className="w-full p-[12px] border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.95rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] placeholder-[#70665d]"
-                />
-              </div>
-
-              <div>
-                <label className="font-medium mb-[6px] text-white text-[0.85rem] tracking-[1px] uppercase block">Email *</label>
+                <label className="font-medium mb-1.5 text-white text-[0.85rem] tracking-[1px] uppercase block">
+                  Email Address <span className="text-[#c8956c]">*</span>
+                </label>
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleFormChange}
+                  value={quickEmail}
+                  onChange={(e) => setQuickEmail(e.target.value)}
                   required
-                  placeholder="Business email"
-                  className="w-full p-[12px] border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.95rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] placeholder-[#70665d]"
+                  placeholder="name@company.com"
+                  className="w-full p-3.5 border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.95rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] focus:shadow-[0_0_15px_rgba(194,163,115,0.15)] placeholder-[#70665d]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-medium mb-[6px] text-white text-[0.85rem] tracking-[1px] uppercase block">Phone</label>
+                  <label className="font-medium mb-1.5 text-white text-[0.8rem] tracking-[1px] uppercase block">
+                    Name <span className="text-[#70665d] normal-case text-xs">(Optional)</span>
+                  </label>
                   <input
                     type="text"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleFormChange}
-                    placeholder="Phone / WhatsApp"
-                    className="w-full p-[12px] border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.95rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] placeholder-[#70665d]"
+                    value={quickName}
+                    onChange={(e) => setQuickName(e.target.value)}
+                    placeholder="Your name"
+                    className="w-full p-3 border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.9rem] text-white outline-none focus:border-[#c8956c] placeholder-[#70665d]"
                   />
                 </div>
                 <div>
-                  <label className="font-medium mb-[6px] text-white text-[0.85rem] tracking-[1px] uppercase block">Company</label>
+                  <label className="font-medium mb-1.5 text-white text-[0.8rem] tracking-[1px] uppercase block">
+                    Phone <span className="text-[#70665d] normal-case text-xs">(Optional)</span>
+                  </label>
                   <input
                     type="text"
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleFormChange}
-                    placeholder="Company name"
-                    className="w-full p-[12px] border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.95rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] placeholder-[#70665d]"
+                    value={quickPhone}
+                    onChange={(e) => setQuickPhone(e.target.value)}
+                    placeholder="WhatsApp / Phone"
+                    className="w-full p-3 border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.9rem] text-white outline-none focus:border-[#c8956c] placeholder-[#70665d]"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="font-medium mb-[6px] text-white text-[0.85rem] tracking-[1px] uppercase block">Product Focus / Sourcing Requirements</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleFormChange}
-                  rows={3}
-                  placeholder="Categories of interest, expected quantities, custom designs..."
-                  className="w-full p-[12px] border border-[#4a3e35] rounded-[8px] bg-[rgba(21,17,15,0.8)] text-[0.95rem] text-white transition-all duration-300 outline-none focus:border-[#c8956c] placeholder-[#70665d] resize-y"
-                ></textarea>
               </div>
 
               <button
                 type="submit"
-                disabled={submitting}
-                className="bg-[#c8956c] border border-[#c8956c] text-[#15110F] p-[14px_24px] text-[12px] font-bold tracking-[2px] uppercase cursor-pointer flex items-center justify-center gap-[10px] transition-all duration-300 w-full rounded-[6px] hover:bg-transparent hover:text-[#c8956c] disabled:opacity-50 mt-2"
+                disabled={isQuickSubmitting}
+                className="bg-[#c8956c] border border-[#c8956c] text-[#15110F] py-3.5 px-6 text-[12px] font-bold tracking-[2px] uppercase cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 w-full rounded-[6px] hover:bg-transparent hover:text-[#c8956c] disabled:opacity-50 mt-1"
               >
-                {submitting ? 'Submitting Application...' : `Confirm & Enquire for ${selectedPlanForModal.name.replace('HIEIL ', '')}`}
+                {isQuickSubmitting ? 'Sending...' : (selectedPlanForModal ? 'Submit Inquiry' : 'Request Consultation')}
               </button>
+
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    const contactEl = document.getElementById('contact');
+                    if (contactEl) contactEl.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="text-xs text-[#b5aaa0] hover:text-[#c8956c] transition-colors underline cursor-pointer bg-transparent border-none"
+                >
+                  Need full quotation or custom requirements? Fill detailed form &darr;
+                </button>
+              </div>
             </form>
           </div>
         </div>
       )}
 
-    </div>
+</div>
   );
 };
 

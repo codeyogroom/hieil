@@ -325,8 +325,8 @@ const UserDashboard = () => {
                           <div key={sub._id} className="bg-[#15110F] border border-[#2c241c] p-5 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-[#c8956c]/40 transition-colors">
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="font-serif text-lg text-white font-medium">{sub.planName}</span>
-                                <span className="text-xs text-[#b5aaa0]">&middot; {sub.duration || 'Plan'}</span>
+                                <span className="font-serif text-lg text-white font-medium">{sub.planName || 'General Sourcing Consultation'}</span>
+                                <span className="text-xs text-[#b5aaa0]">&middot; {sub.duration || (sub.planName ? 'Plan' : 'Direct Consultation')}</span>
                                 {sub.price && <span className="text-xs text-[#c8956c] font-bold">({sub.price})</span>}
                               </div>
                               <div className="text-xs text-[#b5aaa0]">
