@@ -227,10 +227,10 @@ const Membership = () => {
   };
 
   return (
-    <div className="font-sans text-white bg-[#15110F] overflow-x-hidden pt-[50px]">
+    <div className="font-sans text-white bg-[#15110F] overflow-x-hidden">
       
       {/* HERO SECTION */}
-      <section className="py-12 md:py-20 bg-[#15110F] border-b border-[#2c241c]">
+      <section className="pt-6 pb-14 md:pt-10 md:pb-20 bg-[#15110F] border-b border-[#2c241c]">
         <div className="max-w-[1200px] mx-auto px-5 text-center">
           <div data-aos="fade-up">
             <span className="font-sans text-[0.75rem] tracking-[4px] uppercase text-[#c8956c] border border-[#c8956c] rounded-full py-2 px-6 inline-flex items-center gap-3 mb-[30px] bg-transparent">

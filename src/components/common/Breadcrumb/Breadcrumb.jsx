@@ -45,7 +45,9 @@ const Breadcrumb = ({ items }) => {
         'about/us': 'About Us',
         'why-choose-us': 'Why Choose Us',
         'how-we-work': 'How We Work',
-        'legal-info': 'Legal Info'
+        'legal-info': 'Legal Info',
+        'membership': 'Subscription',
+        'subscription': 'Subscription'
       };
 
       let label = path.replace(/-/g, ' ');
