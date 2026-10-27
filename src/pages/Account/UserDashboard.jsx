@@ -87,7 +87,7 @@ const UserDashboard = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left ' + (activeTab === tab.id ? 'bg-[#c8956c] text-[#15110F] font-bold' : 'text-[#888888] hover:bg-[#2c241c] hover:text-white')}
+                  className={'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left ' + (activeTab === tab.id ? 'bg-[#c8956c] text-[#15110F] font-bold' : 'text-[#b5aaa0] hover:bg-[#2c241c] hover:text-white')}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -110,19 +110,19 @@ const UserDashboard = () => {
               <h3 className="text-2xl font-serif text-[#c8956c] mb-6">Profile Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#15110F] p-6 rounded-xl border border-[#2c241c]">
                 <div>
-                  <label className="block text-sm text-[#888888] mb-1">Full Name</label>
+                  <label className="block text-sm text-[#b5aaa0] mb-1">Full Name</label>
                   <p className="text-lg">{user.name}</p>
                 </div>
                 <div>
-                  <label className="block text-sm text-[#888888] mb-1">Email</label>
+                  <label className="block text-sm text-[#b5aaa0] mb-1">Email</label>
                   <p className="text-lg">{user.email}</p>
                 </div>
                 <div>
-                  <label className="block text-sm text-[#888888] mb-1">Phone</label>
+                  <label className="block text-sm text-[#b5aaa0] mb-1">Phone</label>
                   <p className="text-lg">{user.phone || 'N/A'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm text-[#888888] mb-1">Company</label>
+                  <label className="block text-sm text-[#b5aaa0] mb-1">Company</label>
                   <p className="text-lg">{user.companyName || 'N/A'}</p>
                 </div>
               </div>
@@ -138,22 +138,22 @@ const UserDashboard = () => {
                 ) : (
                   <div className="flex flex-col gap-6">
                     {inquiries.length === 0 ? (
-                      <p className="text-[#888888]">You haven't made any inquiries yet.</p>
+                      <p className="text-[#b5aaa0]">You haven't made any inquiries yet.</p>
                     ) : (
                       <>
                         {inquiries.filter(i => i.status !== 'Accepted').map(inq => (
                           <div key={inq._id} className="bg-[#15110F] p-6 rounded-xl border border-[#2c241c]">
                             <div className="flex justify-between items-start mb-4">
                               <h4 className="font-serif text-lg text-white">{inq.product || 'General Inquiry'}</h4>
-                              <span className="bg-[#2c241c] text-[#888888] text-xs px-2 py-1 rounded uppercase">{inq.status || 'Pending'}</span>
+                              <span className="bg-[#2c241c] text-[#b5aaa0] text-xs px-2 py-1 rounded uppercase">{inq.status || 'Pending'}</span>
                             </div>
-                            <p className="text-sm text-[#888888] mb-2"><span className="text-[#b5aaa0]">Quantity:</span> {inq.qty || 'N/A'}</p>
-                            <p className="text-sm text-[#888888] mb-4"><span className="text-[#b5aaa0]">Message:</span> {inq.message || 'No additional message'}</p>
+                            <p className="text-sm text-[#b5aaa0] mb-2"><span className="text-[#b5aaa0]">Quantity:</span> {inq.qty || 'N/A'}</p>
+                            <p className="text-sm text-[#b5aaa0] mb-4"><span className="text-[#b5aaa0]">Message:</span> {inq.message || 'No additional message'}</p>
                             
                             {inq.productId && (
                               <Link 
                                 to={`/product/${inq.productId}`}
-                                className="inline-block mt-2 bg-[#2c241c] hover:bg-[#c8956c] hover:text-[#15110F] text-[#888888] text-xs font-bold tracking-wide uppercase px-4 py-2 rounded transition-colors"
+                                className="inline-block mt-2 bg-[#2c241c] hover:bg-[#c8956c] hover:text-[#15110F] text-[#b5aaa0] text-xs font-bold tracking-wide uppercase px-4 py-2 rounded transition-colors"
                               >
                                 View Product
                               </Link>
@@ -176,14 +176,14 @@ const UserDashboard = () => {
                 ) : (
                   <div className="flex flex-col gap-6">
                     {quotations.length === 0 ? (
-                      <p className="text-[#888888]">No quotations received yet.</p>
+                      <p className="text-[#b5aaa0]">No quotations received yet.</p>
                     ) : (
                       <>
                         {quotations.filter(q => q.status !== 'Accepted').map(quote => (
                           <div key={quote._id} className="bg-[#15110F] p-6 rounded-xl border border-[#c8956c] relative overflow-hidden">
                             <div className="absolute top-0 right-0 bg-[#c8956c] text-[#15110F] text-xs font-bold px-3 py-1 uppercase rounded-bl-lg">Quotation Received</div>
                             <h4 className="font-serif text-xl mb-2 text-white">Quotation #{quote.quoteNo || quote._id.substring(0,6)}</h4>
-                            <div className="grid grid-cols-2 gap-4 mb-4 text-[#888888] text-sm">
+                            <div className="grid grid-cols-2 gap-4 mb-4 text-[#b5aaa0] text-sm">
                               <div><span className="block text-[#b5aaa0]">Product</span>{quote.product}</div>
                               <div><span className="block text-[#b5aaa0]">Total Amount</span>${quote.total}</div>
                               <div><span className="block text-[#b5aaa0]">Valid Till</span>{quote.validTill || 'N/A'}</div>
@@ -225,7 +225,7 @@ const UserDashboard = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-[#888888]">Your wishlist is currently empty.</p>
+                <p className="text-[#b5aaa0]">Your wishlist is currently empty.</p>
               )}
             </div>
           )}
@@ -237,7 +237,7 @@ const UserDashboard = () => {
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <div>
                   <h3 className="text-2xl font-serif text-[#c8956c] m-0">My Importer Membership</h3>
-                  <p className="text-[#888] text-sm mt-1">Manage and track your sourcing membership privileges and applications.</p>
+                  <p className="text-[#b5aaa0] text-sm mt-1">Manage and track your sourcing membership privileges and applications.</p>
                 </div>
                 <Link
                   to="/membership"
@@ -271,21 +271,21 @@ const UserDashboard = () => {
                             </div>
                             <div className="text-right">
                               <div className="text-xl font-bold text-[#c8956c]">{activeSub.price}</div>
-                              <div className="text-xs text-[#888]">{activeSub.duration}</div>
+                              <div className="text-xs text-[#b5aaa0]">{activeSub.duration}</div>
                             </div>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-[#2c241c] text-sm">
                             <div>
-                              <span className="text-xs text-[#888] block">Start Date</span>
+                              <span className="text-xs text-[#b5aaa0] block">Start Date</span>
                               <span className="text-white font-medium">{activeSub.startDate ? new Date(activeSub.startDate).toLocaleDateString() : new Date(activeSub.createdAt).toLocaleDateString()}</span>
                             </div>
                             <div>
-                              <span className="text-xs text-[#888] block">End / Renewal Date</span>
+                              <span className="text-xs text-[#b5aaa0] block">End / Renewal Date</span>
                               <span className="text-white font-medium">{activeSub.endDate ? new Date(activeSub.endDate).toLocaleDateString() : 'Active Ongoing'}</span>
                             </div>
                             <div>
-                              <span className="text-xs text-[#888] block">Support Channel</span>
+                              <span className="text-xs text-[#b5aaa0] block">Support Channel</span>
                               <a 
                                 href="https://wa.me/919050001972?text=Hi!%20I%20am%20an%20active%20HIEIL%20member%20inquiring%20about%20my%20sourcing." 
                                 target="_blank" 
@@ -309,7 +309,7 @@ const UserDashboard = () => {
                       <div className="bg-[#15110F] border border-[#2c241c] p-8 rounded-xl text-center">
                         <Crown size={36} className="mx-auto text-[#c8956c] mb-3 opacity-60" />
                         <p className="text-white font-medium mb-1">No Membership Subscription Found</p>
-                        <p className="text-[#888] text-sm max-w-md mx-auto mb-5">
+                        <p className="text-[#b5aaa0] text-sm max-w-md mx-auto mb-5">
                           Join HIEIL's Importer Membership to access verified manufacturer pricing, custom handicraft sourcing, and transparent quotation coordination.
                         </p>
                         <Link
@@ -326,10 +326,10 @@ const UserDashboard = () => {
                             <div>
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="font-serif text-lg text-white font-medium">{sub.planName}</span>
-                                <span className="text-xs text-[#888]">&middot; {sub.duration || 'Plan'}</span>
+                                <span className="text-xs text-[#b5aaa0]">&middot; {sub.duration || 'Plan'}</span>
                                 {sub.price && <span className="text-xs text-[#c8956c] font-bold">({sub.price})</span>}
                               </div>
-                              <div className="text-xs text-[#888]">
+                              <div className="text-xs text-[#b5aaa0]">
                                 Applied on {new Date(sub.createdAt).toLocaleDateString()}
                                 {sub.companyName && <span> &middot; {sub.companyName}</span>}
                                 {sub.targetMarket && <span> &middot; Market: {sub.targetMarket}</span>}
@@ -355,7 +355,7 @@ const UserDashboard = () => {
                                 href="https://wa.me/919050001972?text=Hi!%20I%20have%20an%20inquiry%20regarding%20my%20membership%20application."
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-xs text-[#888] hover:text-[#c8956c] underline"
+                                className="text-xs text-[#b5aaa0] hover:text-[#c8956c] underline"
                               >
                                 Need Help?
                               </a>
@@ -379,14 +379,14 @@ const UserDashboard = () => {
               ) : (
                 <div className="flex flex-col gap-4">
                   {orders.length === 0 ? (
-                    <p className="text-[#888888]">You haven't placed any orders yet.</p>
+                    <p className="text-[#b5aaa0]">You haven't placed any orders yet.</p>
                   ) : (
                     orders.map(order => (
                       <div key={order._id} className="bg-[#15110F] p-5 rounded-xl border border-[#2c241c] flex flex-col md:flex-row justify-between items-start md:items-start gap-4">
                         <div className="flex-1 w-full">
                           <div className="text-[#c8956c] font-bold mb-1">{order.orderNo || order._id}</div>
                           <div className="text-white text-lg font-serif">{order.product}</div>
-                          <div className="text-sm text-[#888888] mt-1 mb-4">{new Date(order.createdAt).toLocaleDateString()}</div>
+                          <div className="text-sm text-[#b5aaa0] mt-1 mb-4">{new Date(order.createdAt).toLocaleDateString()}</div>
                           
                           <div className="w-full bg-[#110e0c] p-4 rounded-lg">
                             <h5 className="text-[#c8956c] font-bold mb-3 text-sm">PAYMENT ENTRIES</h5>
@@ -394,17 +394,17 @@ const UserDashboard = () => {
                               {/* Financial Summary */}
                               <div className="flex flex-wrap gap-4 mb-4 bg-[#15110F] p-3 rounded border border-[#2c241c]">
                                 <div className="flex-1">
-                                  <span className="block text-[#888888] text-xs">TOTAL AMOUNT</span>
+                                  <span className="block text-[#b5aaa0] text-xs">TOTAL AMOUNT</span>
                                   <span className="text-white font-bold">${order.totalAmount || 0}</span>
                                 </div>
                                 <div className="flex-1">
-                                  <span className="block text-[#888888] text-xs">TOTAL PAID</span>
+                                  <span className="block text-[#b5aaa0] text-xs">TOTAL PAID</span>
                                   <span className="text-green-500 font-bold">
                                     ${(order.installments || []).reduce((sum, inst) => inst.status === 'Paid' ? sum + (parseFloat(inst.amount) || 0) : sum, 0).toFixed(2)}
                                   </span>
                                 </div>
                                 <div className="flex-1">
-                                  <span className="block text-[#888888] text-xs">PENDING BALANCE</span>
+                                  <span className="block text-[#b5aaa0] text-xs">PENDING BALANCE</span>
                                   <span className="text-red-500 font-bold">
                                     ${(
                                       parseFloat(order.totalAmount || 0) - 
@@ -417,7 +417,7 @@ const UserDashboard = () => {
                               {order.installments?.length > 0 ? (
                                 <div className="overflow-x-auto">
                                   <table className="w-full text-sm text-left">
-                                    <thead className="text-[#888888] border-b border-[#2c241c]">
+                                    <thead className="text-[#b5aaa0] border-b border-[#2c241c]">
                                       <tr>
                                         <th className="py-2">Date/Due</th>
                                         <th className="py-2">Title</th>
@@ -434,7 +434,7 @@ const UserDashboard = () => {
                                           <td className="py-2">{p.title || 'Installment'}</td>
                                           <td className="py-2 font-bold">${p.amount}</td>
                                           <td className="py-2 uppercase">{p.paymentMode || '-'}</td>
-                                          <td className="py-2 text-[#888888]">{p.reference || '-'}</td>
+                                          <td className="py-2 text-[#b5aaa0]">{p.reference || '-'}</td>
                                           <td className="py-2">
                                             <span className={`px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${p.status === 'Paid' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}`}>
                                               {p.status || 'Pending'}
@@ -446,7 +446,7 @@ const UserDashboard = () => {
                                   </table>
                                 </div>
                               ) : (
-                                <p className="text-[#888888] text-sm italic">
+                                <p className="text-[#b5aaa0] text-sm italic">
                                   No payment entries yet. Payments are handled directly (Bank/UPI). 
                                   Admin will update this log once payment is received.
                                 </p>
