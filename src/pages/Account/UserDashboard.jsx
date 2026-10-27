@@ -71,7 +71,7 @@ const UserDashboard = () => {
     { id: 'quotations', label: 'My Quotations', icon: <FileText size={18} /> },
     { id: 'wishlist', label: 'Wishlist', icon: <Heart size={18} /> },
     { id: 'orders', label: 'Orders', icon: <CheckCircle size={18} /> },
-    { id: 'membership', label: 'My Membership', icon: <Crown size={18} /> },
+    { id: 'membership', label: 'My Subscription', icon: <Crown size={18} /> },
   ];
 
   return (
@@ -236,11 +236,11 @@ const UserDashboard = () => {
             <div>
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <div>
-                  <h3 className="text-2xl font-serif text-[#c8956c] m-0">My Importer Membership</h3>
+                  <h3 className="text-2xl font-serif text-[#c8956c] m-0">My Importer Subscription</h3>
                   <p className="text-[#b5aaa0] text-sm mt-1">Manage and track your sourcing membership privileges and applications.</p>
                 </div>
                 <Link
-                  to="/membership"
+                  to="/subscription"
                   className="bg-[#c8956c] text-[#15110F] font-bold text-xs uppercase tracking-wider py-2.5 px-5 rounded hover:bg-[#e2c994] transition-all flex items-center gap-1.5"
                 >
                   <Sparkles size={14} /> Explore All Plans
@@ -264,7 +264,7 @@ const UserDashboard = () => {
                               </div>
                               <div>
                                 <span className="bg-[#c8956c] text-[#15110F] text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full inline-block mb-1">
-                                  ACTIVE MEMBER
+                                  ACTIVE SUBSCRIBER
                                 </span>
                                 <h4 className="font-serif text-2xl text-white font-medium m-0">{activeSub.planName}</h4>
                               </div>
@@ -304,19 +304,19 @@ const UserDashboard = () => {
 
                   {/* All applications / enquiries list */}
                   <div>
-                    <h4 className="text-lg font-serif text-white mb-3">Membership Inquiries & Applications</h4>
+                    <h4 className="text-lg font-serif text-white mb-3">Subscription Inquiries & Applications</h4>
                     {memberships.length === 0 ? (
                       <div className="bg-[#15110F] border border-[#2c241c] p-8 rounded-xl text-center">
                         <Crown size={36} className="mx-auto text-[#c8956c] mb-3 opacity-60" />
-                        <p className="text-white font-medium mb-1">No Membership Subscription Found</p>
+                        <p className="text-white font-medium mb-1">No Active Subscription Found</p>
                         <p className="text-[#b5aaa0] text-sm max-w-md mx-auto mb-5">
-                          Join HIEIL's Importer Membership to access verified manufacturer pricing, custom handicraft sourcing, and transparent quotation coordination.
+                          Join HIEIL's Importer Subscription to access verified manufacturer pricing, custom handicraft sourcing, and transparent quotation coordination.
                         </p>
                         <Link
-                          to="/membership"
+                          to="/subscription"
                           className="inline-block bg-[#c8956c] text-[#15110F] font-bold text-xs uppercase tracking-wider py-3 px-6 rounded hover:bg-[#e2c994] transition-all"
                         >
-                          View Membership Plans & Apply
+                          View Subscription Plans & Apply
                         </Link>
                       </div>
                     ) : (

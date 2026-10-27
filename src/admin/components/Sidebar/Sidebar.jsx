@@ -142,10 +142,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                  {to: '/vendor-management/payout', label: 'Vendor Payout'}
                ]}
             </SidebarItem>}
-            {hasPermission("Membership") && <SidebarItem isSidebarOpen={isOpen} icon={FaCrown} label="Membership">
+            {hasPermission("Membership") && <SidebarItem isSidebarOpen={isOpen} icon={FaCrown} label="Subscription">
                {[
-                 {to: '/membership-plans', label: 'Membership Plans'},
-                 {to: '/membership-enquiries', label: 'Membership Enquiries'}
+                 {to: '/membership-plans', label: 'Subscription Plans'},
+                 {to: '/membership-enquiries', label: 'Subscription Enquiries'}
                ]}
             </SidebarItem>}
             {hasPermission("Inquiry System") && <SidebarItem isSidebarOpen={isOpen} icon={FaBoxOpen} label="Inquiry System">

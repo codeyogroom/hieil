@@ -2490,14 +2490,14 @@ export const pageConfigs = [
   },
   {
     path: 'membership-plans',
-    title: 'Membership Plans',
-    singularTitle: 'Membership Plan',
-    breadcrumbParent: 'Membership',
-    formTitleAdd: 'Add Membership Plan',
-    formTitleEdit: 'Edit Membership Plan',
-    formCardTitle: 'MEMBERSHIP PLAN DETAILS',
+    title: 'Subscription Plans',
+    singularTitle: 'Subscription Plan',
+    breadcrumbParent: 'Subscription',
+    formTitleAdd: 'Add Subscription Plan',
+    formTitleEdit: 'Edit Subscription Plan',
+    formCardTitle: 'SUBSCRIPTION PLAN DETAILS',
     columns: {
-      title: 'MEMBERSHIP PLANS',
+      title: 'SUBSCRIPTION PLANS',
       addButtonText: 'Add New Plan',
       headers: [
         { key: 'order', label: 'Order', formLabel: 'Display Order (1, 2, 3...)', type: 'number', placeholder: '1' },
@@ -2519,14 +2519,14 @@ export const pageConfigs = [
   },
   {
     path: 'membership-enquiries',
-    title: 'Membership Enquiries',
-    singularTitle: 'Membership Enquiry',
-    breadcrumbParent: 'Membership',
-    formTitleAdd: 'Add Membership Enquiry',
-    formTitleEdit: 'Edit Membership Enquiry',
-    formCardTitle: 'MEMBERSHIP ENQUIRY DETAILS',
+    title: 'Subscription Enquiries',
+    singularTitle: 'Subscription Enquiry',
+    breadcrumbParent: 'Subscription',
+    formTitleAdd: 'Add Subscription Enquiry',
+    formTitleEdit: 'Edit Subscription Enquiry',
+    formCardTitle: 'SUBSCRIPTION ENQUIRY DETAILS',
     columns: {
-      title: 'MEMBERSHIP ENQUIRIES',
+      title: 'SUBSCRIPTION ENQUIRIES',
       addButtonText: 'Add Enquiry',
       headers: [
         { key: 'createdAt', label: 'Date', hideInForm: true, render: (val) => val ? new Date(val).toLocaleDateString() : 'N/A' },
@@ -2551,8 +2551,8 @@ export const pageConfigs = [
             return React.createElement('span', { style: { backgroundColor: color, color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' } }, val || 'Pending');
           }
         },
-        { key: 'startDate', label: 'Start Date', type: 'date', formLabel: 'Membership Start Date' },
-        { key: 'endDate', label: 'End Date', type: 'date', formLabel: 'Membership Expiry Date' },
+        { key: 'startDate', label: 'Start Date', type: 'date', formLabel: 'Subscription Start Date' },
+        { key: 'endDate', label: 'End Date', type: 'date', formLabel: 'Subscription Expiry Date' },
         { key: 'notes', label: 'Admin Notes', type: 'textarea', formLabel: 'Internal Notes / Note to Client' }
       ]
     },

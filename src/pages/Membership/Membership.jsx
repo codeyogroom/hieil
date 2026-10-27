@@ -194,7 +194,7 @@ const Membership = () => {
       
       Swal.fire({
         title: 'Application Received!',
-        html: `Thank you <b>${formData.name}</b>. Your membership enquiry for <b>${formData.planName}</b> has been received. Our international sourcing director will contact you within 24 hours.`,
+        html: `Thank you <b>${formData.name}</b>. Your subscription enquiry for <b>${formData.planName}</b> has been received. Our international sourcing director will contact you within 24 hours.`,
         icon: 'success',
         confirmButtonColor: '#c8956c',
         background: '#1C1713',
@@ -247,7 +247,7 @@ const Membership = () => {
                 href="#plans" 
                 className="inline-block bg-[#c8956c] text-[#15110F] border border-[#c8956c] py-3.5 px-8 text-[12px] tracking-[2px] uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c] rounded-[6px]"
               >
-                View Membership Plans
+                View Subscription Plans
               </a>
               <a 
                 href="#contact" 
@@ -276,7 +276,7 @@ const Membership = () => {
               <div className="w-[54px] h-[54px] mb-5 flex items-center justify-center bg-[rgba(200,149,108,0.1)] border border-[rgba(200,149,108,0.3)] text-[#c8956c] font-serif text-2xl font-bold rounded-full">
                 01
               </div>
-              <h3 className="font-serif text-[1.2rem] font-bold text-white mb-2 uppercase tracking-[1px]">Choose a membership</h3>
+              <h3 className="font-serif text-[1.2rem] font-bold text-white mb-2 uppercase tracking-[1px]">Choose a subscription</h3>
               <p className="text-[#b5aaa0] leading-[1.6] text-[14px] m-0">Pick a 3-month, 6-month or annual plan to match how you buy.</p>
             </div>
             <div className="bg-[rgba(28,23,19,0.6)] backdrop-blur-[10px] border border-[#2c241c] rounded-[20px] p-7 transition-all duration-400 ease-in-out hover:border-[#c8956c] hover:shadow-[0_10px_40px_rgba(194,163,115,0.05)] hover:-translate-y-[5px]" data-aos="fade-up" data-aos-delay="200">
@@ -309,10 +309,10 @@ const Membership = () => {
         <div className="max-w-[1200px] mx-auto px-5">
           <div className="text-center mb-[60px]" data-aos="fade-up">
             <h2 className="text-3xl md:text-5xl/15 font-serif font-normal text-white uppercase tracking-[1px] mb-[15px]">
-              Importer Membership Plans
+              Importer Subscription Plans
             </h2>
             <p className="font-sans text-[1.05rem] md:text-[1.1rem] font-normal text-[#b5aaa0] max-w-[700px] mx-auto">
-              Membership fees are separate from product, shipping and order service costs.
+              Subscription fees are separate from product, shipping and order service costs.
             </p>
           </div>
 
@@ -430,7 +430,7 @@ const Membership = () => {
               </thead>
               <tbody className="divide-y divide-[#2c241c] text-[14px]">
                 <tr>
-                  <td className="p-5 text-[#ffffff] font-medium">Membership duration</td>
+                  <td className="p-5 text-[#ffffff] font-medium">Subscription duration</td>
                   <td className="p-5 text-[#b5aaa0]">3 months</td>
                   <td className="p-5 text-[#c8956c] font-semibold border-x border-[#2c241c] bg-[rgba(200,149,108,0.04)]">6 months</td>
                   <td className="p-5 text-[#b5aaa0]">12 months</td>
@@ -475,7 +475,7 @@ const Membership = () => {
             </table>
           </div>
           <p className="text-[#8c8279] text-xs text-center mt-5">
-            Turnaround times, revision limits and support hours are confirmed in your membership agreement.
+            Turnaround times, revision limits and support hours are confirmed in your subscription agreement.
           </p>
         </div>
       </section>
@@ -672,7 +672,7 @@ const Membership = () => {
                 disabled={submitting}
                 className="bg-[#c8956c] border border-[#c8956c] text-[#15110F] p-[16px_30px] text-[12px] font-bold tracking-[2px] uppercase cursor-pointer flex items-center justify-center gap-[10px] transition-all duration-300 w-full rounded-[6px] hover:bg-transparent hover:text-[#c8956c] disabled:opacity-50"
               >
-                {submitting ? 'Submitting Application...' : 'Submit Membership Application'} <Send size={16} />
+                {submitting ? 'Submitting Application...' : 'Submit Subscription Application'} <Send size={16} />
               </button>
 
               <div className="text-center text-xs text-[#8c8279]">
@@ -695,7 +695,7 @@ const Membership = () => {
             </button>
 
             <div className="mb-6">
-              <span className="text-[#c8956c] text-xs uppercase tracking-[2px] font-bold block mb-1">Membership Application</span>
+              <span className="text-[#c8956c] text-xs uppercase tracking-[2px] font-bold block mb-1">Subscription Application</span>
               <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white uppercase tracking-[1px]">{selectedPlanForModal.name}</h3>
               <div className="text-[#b5aaa0] text-sm mt-1">
                 Duration: <span className="text-white font-medium">{selectedPlanForModal.duration}</span> &middot; Investment: <span className="text-[#c8956c] font-bold">{selectedPlanForModal.price}</span>

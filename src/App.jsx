@@ -124,7 +124,7 @@ function App() {
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/account" element={<UserDashboard />} />
               <Route path="/membership" element={<Membership />} />
-              <Route path="/subscription" element={<Navigate to="/membership" replace />} />
+              <Route path="/subscription" element={<Membership />} />
 
 
               <Route path="/terms-of-service" element={<TermsOfService />} />
