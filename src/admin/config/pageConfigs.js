@@ -2608,7 +2608,165 @@ export const pageConfigs = [
       ]
     },
     data: []
-  }
+  },
+  {
+    path: 'inquiry-system/catalogue-requests',
+    title: 'Catalogue & Quote Requests',
+    singularTitle: 'Catalogue Request',
+    breadcrumbParent: 'Inquiry System',
+    apiEndpoint: '/catalogue-requests',
+    formTitleAdd: 'Add Catalogue Request',
+    formTitleEdit: 'Edit Catalogue Request',
+    formCardTitle: 'CATALOGUE REQUEST DETAILS',
+    columns: {
+      title: 'CATALOGUE & QUOTE REQUESTS',
+      hideDefaultActions: false,
+      headers: [
+        { 
+          key: 'createdAt', 
+          label: 'Date', 
+          hideInForm: true, 
+          render: (val) => val ? new Date(val).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A' 
+        },
+        { key: 'name', label: 'Client Name', formLabel: 'Client Name *', placeholder: 'Enter Client Name' },
+        { 
+          key: 'email', 
+          label: 'Email', 
+          formLabel: 'Email *', 
+          placeholder: 'Enter Email',
+          render: (val) => React.createElement('a', { href: `mailto:${val}`, style: { color: '#2563eb', fontWeight: '500', textDecoration: 'none' } }, val)
+        },
+        { key: 'phone', label: 'Phone', formLabel: 'Phone / WhatsApp', placeholder: 'Enter Phone' },
+        {
+          key: 'catalogues',
+          label: 'Requested Catalogues',
+          formLabel: 'Catalogues',
+          render: (val) => {
+            const list = Array.isArray(val) ? val : [];
+            if (list.length === 0) return React.createElement('span', { style: { color: '#94a3b8', fontStyle: 'italic', fontSize: '12px' } }, 'None selected');
+            
+            const badgeStyles = {
+              'blue-pottery': { bg: '#e0f2fe', color: '#0369a1', border: '#bae6fd' },
+              'clocks': { bg: '#fef3c7', color: '#b45309', border: '#fde68a' },
+              'metal': { bg: '#f1f5f9', color: '#334155', border: '#cbd5e1' },
+              'stone': { bg: '#f5f5f4', color: '#44403c', border: '#d6d3d1' },
+              'wood': { bg: '#ffedd5', color: '#c2410c', border: '#fed7aa' }
+            };
+
+            return React.createElement('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '4px', maxWidth: '320px' } },
+              list.map((c, i) => {
+                const s = badgeStyles[c.id] || { bg: '#f3f4f6', color: '#374151', border: '#e5e7eb' };
+                return React.createElement('span', {
+                  key: i,
+                  title: c.file || c.title,
+                  style: {
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    backgroundColor: s.bg,
+                    color: s.color,
+                    border: `1px solid ${s.border}`
+                  }
+                }, React.createElement(FaFilePdf, { style: { fontSize: '10px' } }), c.badge || c.title);
+              })
+            );
+          }
+        },
+        {
+          key: 'status',
+          label: 'Status',
+          type: 'select',
+          options: ['Pending', 'Approved', 'Rejected'],
+          formLabel: 'Status',
+          render: (val, row, { onUpdateRow }) => {
+            const isApproved = val === 'Approved';
+            const isPending = val === 'Pending';
+            const bg = isApproved ? '#dcfce7' : (isPending ? '#fef3c7' : '#fee2e2');
+            const color = isApproved ? '#15803d' : (isPending ? '#b45309' : '#b91c1c');
+            const border = isApproved ? '#bbf7d0' : (isPending ? '#fde68a' : '#fecaca');
+
+            return React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
+              React.createElement('span', {
+                style: {
+                  padding: '4px 10px',
+                  borderRadius: '9999px',
+                  fontSize: '11px',
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  backgroundColor: bg,
+                  color: color,
+                  border: `1px solid ${border}`
+                }
+              }, val || 'Pending'),
+              isPending && onUpdateRow && React.createElement('button', {
+                type: 'button',
+                title: 'Click to Approve & Grant Access',
+                style: {
+                  padding: '3px 8px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  backgroundColor: '#16a34a',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                },
+                onClick: () => onUpdateRow(row.id || row._id, 'status', 'Approved')
+              }, React.createElement(FaCheck, { style: { fontSize: '10px' } }), 'Approve')
+            );
+          }
+        },
+        { key: 'adminNotes', label: 'Admin Notes', type: 'textarea', formLabel: 'Internal Notes / Remarks' }
+      ],
+      actions: (row, { onUpdateRow, onDelete }) => {
+        const rowId = row.id || row._id;
+        const isApproved = row.status === 'Approved';
+        
+        return React.createElement('div', { style: { display: 'flex', gap: '6px', justifyContent: 'center' } },
+          !isApproved ? (
+            React.createElement('button', {
+              className: 'modern-action-btn btn-success',
+              title: 'Approve Catalogue Access',
+              style: { backgroundColor: '#16a34a', color: '#fff', padding: '6px 10px', borderRadius: '4px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px' },
+              onClick: () => onUpdateRow && onUpdateRow(rowId, 'status', 'Approved')
+            }, React.createElement(FaCheck, null), ' Approve')
+          ) : (
+            React.createElement('button', {
+              className: 'modern-action-btn btn-secondary',
+              title: 'Revoke / Set Pending',
+              style: { backgroundColor: '#f59e0b', color: '#fff', padding: '6px 8px', borderRadius: '4px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' },
+              onClick: () => onUpdateRow && onUpdateRow(rowId, 'status', 'Pending')
+            }, 'Revoke')
+          ),
+          row.status !== 'Rejected' && (
+            React.createElement('button', {
+              className: 'modern-action-btn btn-danger',
+              title: 'Reject Request',
+              style: { backgroundColor: '#ef4444', color: '#fff', padding: '6px 8px', borderRadius: '4px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '11px' },
+              onClick: () => onUpdateRow && onUpdateRow(rowId, 'status', 'Rejected')
+            }, React.createElement(FaTimes, null))
+          ),
+          onDelete && (
+            React.createElement('button', {
+              className: 'modern-action-btn btn-danger',
+              title: 'Delete Request',
+              style: { backgroundColor: '#64748b', color: '#fff', padding: '6px 8px', borderRadius: '4px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '11px' },
+              onClick: () => onDelete(row)
+            }, React.createElement(FaTrash, null))
+          )
+        );
+      }
+    },
+    data: []
+  },
 ];
 
 

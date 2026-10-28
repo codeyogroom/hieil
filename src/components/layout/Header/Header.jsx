@@ -1,11 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, ChevronUp, ChevronRight, User } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronUp, ChevronRight, User, FileText, CheckSquare, Square, Lock, ShieldCheck, Check } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { HEADER_LINKS } from '../../../constants/navigation';
 import api from '../../../config/api';
 import Swal from 'sweetalert2';
 import GoogleTranslate from '../../common/GoogleTranslate/GoogleTranslate';
+
+
+const AVAILABLE_CATALOGUES = [
+  {
+    id: 'blue-pottery',
+    title: 'Handcrafted Blue Pottery',
+    badge: 'Blue Pottery',
+    subtitle: 'Jaipur traditional ceramic art, tiles, vases, dinnerware & planters',
+    file: 'HIEIL_Blue_Pottery_Catalogue.pdf'
+  },
+  {
+    id: 'clocks',
+    title: 'Luxury Handcrafted Clocks',
+    badge: 'Clocks',
+    subtitle: 'Artisanal antique & contemporary wall, table & grandfather timepieces',
+    file: 'HIEIL_Handcrafted_Clock_Catalogue.pdf'
+  },
+  {
+    id: 'metal',
+    title: 'Handcrafted Metal Art & Decor',
+    badge: 'Metal Art',
+    subtitle: 'Brass, bell metal, iron sculptures, lanterns, hardware & accents',
+    file: 'HIEIL_Handcrafted_Metal_Catalogue.pdf'
+  },
+  {
+    id: 'stone',
+    title: 'Handcrafted Natural Stone Decor',
+    badge: 'Stone Decor',
+    subtitle: 'Marble inlay, soapstone, sandstone carving & architectural decor',
+    file: 'HIEIL_Handcrafted_Stone_Catalogue.pdf'
+  },
+  {
+    id: 'wood',
+    title: 'Handcrafted Woodcraft & Furniture',
+    badge: 'Woodcraft',
+    subtitle: 'Sheesham, mango wood carvings, carved panels & artisan furniture',
+    file: 'HIEIL_Handcrafted_Wood_Catalogue.pdf'
+  }
+];
 
 const Header = () => {
   const { user } = useAuth();
@@ -19,40 +58,133 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [quoteEmail, setQuoteEmail] = useState('');
+  const [quoteName, setQuoteName] = useState('');
+  const [quotePhone, setQuotePhone] = useState('');
+  const [selectedCatalogues, setSelectedCatalogues] = useState(AVAILABLE_CATALOGUES.map(c => c.id));
   const [quoteSubmitting, setQuoteSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (!quoteEmail && user.email) setQuoteEmail(user.email);
+      if (!quoteName && user.name) setQuoteName(user.name);
+      if (!quotePhone && user.phone) setQuotePhone(user.phone);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const handleOpenModal = () => {
+      if (user) {
+        setQuoteEmail(user.email || '');
+        setQuoteName(user.name || '');
+        setQuotePhone(user.phone || '');
+      }
+      setIsQuoteModalOpen(true);
+    };
+    window.addEventListener('open-catalogue-modal', handleOpenModal);
+    window.addEventListener('open-quote-modal', handleOpenModal);
+    return () => {
+      window.removeEventListener('open-catalogue-modal', handleOpenModal);
+      window.removeEventListener('open-quote-modal', handleOpenModal);
+    };
+  }, [user]);
+
+  const toggleCatalogue = (id) => {
+    if (selectedCatalogues.includes(id)) {
+      setSelectedCatalogues(selectedCatalogues.filter(item => item !== id));
+    } else {
+      setSelectedCatalogues([...selectedCatalogues, id]);
+    }
+  };
+
+  const toggleSelectAllCatalogues = () => {
+    if (selectedCatalogues.length === AVAILABLE_CATALOGUES.length) {
+      setSelectedCatalogues([]);
+    } else {
+      setSelectedCatalogues(AVAILABLE_CATALOGUES.map(c => c.id));
+    }
+  };
+
+  const handleOpenQuoteModal = () => {
+    if (user) {
+      setQuoteEmail(user.email || '');
+      setQuoteName(user.name || '');
+      setQuotePhone(user.phone || '');
+    }
+    if (selectedCatalogues.length === 0) {
+      setSelectedCatalogues(AVAILABLE_CATALOGUES.map(c => c.id));
+    }
+    setIsQuoteModalOpen(true);
+  };
 
   const handleQuoteSubmit = async (e) => {
     e.preventDefault();
-    if (!quoteEmail) return;
-    setQuoteSubmitting(true);
-    try {
-      await api.post('/inquiries', {
-        email: quoteEmail,
-        customer: user ? user.name : 'Guest',
-        type: 'inquiry',
-        status: 'Pending',
-        userId: user ? user.id : undefined,
-        message: 'Quick Quote Request',
-        product: '',
-        productId: ''
-      });
-      setIsQuoteModalOpen(false);
-      setQuoteEmail('');
+    if (!quoteEmail) {
       Swal.fire({
-        title: 'Success',
-        text: 'Quote request submitted successfully!',
-        icon: 'success',
+        title: 'Email Required',
+        text: 'Please enter your email address to receive catalogue access.',
+        icon: 'warning',
         confirmButtonColor: '#c8956c',
         background: '#110e0c',
         color: '#fff'
       });
+      return;
+    }
+    if (selectedCatalogues.length === 0) {
+      Swal.fire({
+        title: 'Select Catalogues',
+        text: 'Please select at least one catalogue topic to proceed.',
+        icon: 'warning',
+        confirmButtonColor: '#c8956c',
+        background: '#110e0c',
+        color: '#fff'
+      });
+      return;
+    }
+
+    setQuoteSubmitting(true);
+    try {
+      const chosenCatalogues = AVAILABLE_CATALOGUES.filter(c => selectedCatalogues.includes(c.id));
+      await api.post('/catalogue-requests', {
+        email: quoteEmail.trim().toLowerCase(),
+        name: quoteName.trim(),
+        phone: quotePhone.trim(),
+        catalogues: chosenCatalogues,
+        userId: user ? user.id : undefined
+      });
+
+      setIsQuoteModalOpen(false);
+
+      Swal.fire({
+        title: 'Request Submitted!',
+        html: `
+          <div style="text-align: left; font-size: 14px; line-height: 1.6; color: #ece6dc;">
+            <p style="margin-bottom: 12px;">Your request for <strong>${chosenCatalogues.length} catalogue(s)</strong> has been successfully submitted to our export team.</p>
+            <div style="background: rgba(200,149,108,0.1); border: 1px solid rgba(200,149,108,0.3); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+              <p style="margin: 0; color: #c8956c; font-size: 13px; font-weight: bold;">🔒 Admin Verification Required:</p>
+              <p style="margin: 4px 0 0; font-size: 13px; color: #a39a8c;">To protect manufacturer pricing, catalogues remain locked until verified by admin. Once approved, the PDF files will be immediately unlocked in your <strong>Account Dashboard</strong>.</p>
+            </div>
+            ${!user ? '<p style="font-size: 12px; color: #9ca3af; margin: 0;">💡 Log in or register with <strong>' + quoteEmail + '</strong> to access your catalogues once approved.</p>' : ''}
+          </div>
+        `,
+        icon: 'success',
+        confirmButtonColor: '#c8956c',
+        confirmButtonText: user ? 'Go to My Catalogues' : 'OK, Got It',
+        showCancelButton: Boolean(user),
+        cancelButtonText: 'Stay on Page',
+        cancelButtonColor: '#4b5563',
+        background: '#110e0c',
+        color: '#fff'
+      }).then((result) => {
+        if (result.isConfirmed && user) {
+          navigate('/account');
+        }
+      });
     } catch (error) {
       Swal.fire({
         title: 'Error',
-        text: error.response?.data?.message || 'Failed to submit quote request',
+        text: error.response?.data?.message || 'Failed to submit catalogue request',
         icon: 'error',
         confirmButtonColor: '#c8956c',
         background: '#110e0c',
@@ -218,7 +350,7 @@ const Header = () => {
           <User size={16} />
         </Link>
         <Link to="/subscription" className="hidden xl:flex items-center justify-center border border-[#c8956c] text-[#c8956c] py-1.5 px-3 2xl:py-2.5 2xl:px-4 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c] shrink-0 whitespace-nowrap">SUBSCRIPTION</Link>
-        <button className="hidden sm:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-1.5 px-3.5 2xl:py-2.5 2xl:px-6 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c] shrink-0 whitespace-nowrap" onClick={() => setIsQuoteModalOpen(true)}>GET QUOTE</button>
+        <button className="hidden sm:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-1.5 px-3.5 2xl:py-2.5 2xl:px-6 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c] shrink-0 whitespace-nowrap" onClick={handleOpenQuoteModal}>GET QUOTE</button>
         <button className="block xl:hidden bg-transparent border-none text-[#c8956c] cursor-pointer p-1 shrink-0 ml-1" onClick={toggleMobileMenu} aria-label="Toggle menu">
           {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
@@ -315,40 +447,149 @@ const Header = () => {
             ))}
             <Link to="/account" className="block w-full border border-[#c8956c] text-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-5 text-center transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]" onClick={() => setIsMobileMenuOpen(false)}><div className="flex items-center justify-center gap-2"><User size={16} />{user ? user.name.split(' ')[0] : 'LOGIN / REGISTER'}</div></Link>
             <Link to="/membership" className="block w-full border border-[#c8956c] text-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-3 text-center transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]" onClick={() => setIsMobileMenuOpen(false)}>MEMBERSHIP</Link>
-            <button className="bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-3 text-center transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => { setIsQuoteModalOpen(true); setIsMobileMenuOpen(false); }}>GET QUOTE</button>
+            <button className="bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3.5 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold mt-3 text-center transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => { handleOpenQuoteModal(); setIsMobileMenuOpen(false); }}>GET QUOTE</button>
           </div>
         </div>
       )}
     
-      {/* Quick Quote Modal */}
+      {/* Quick Quote & Catalogue Request Modal */}
       {isQuoteModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#110e0c] border border-[#c8956c]/30 p-8 w-full max-w-md relative">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-5 overflow-y-auto">
+          <div className="bg-[#110e0c] border border-[#c8956c]/40 p-6 sm:p-8 w-full max-w-2xl relative my-auto max-h-[92vh] overflow-y-auto shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
             <button 
-              className="absolute top-4 right-4 text-[#888888] hover:text-[#c8956c] transition-colors"
+              className="absolute top-4 right-4 text-[#888888] hover:text-[#c8956c] transition-colors p-1"
               onClick={() => setIsQuoteModalOpen(false)}
+              aria-label="Close"
             >
-              <X size={24} />
+              <X size={22} />
             </button>
-            <h3 className="font-serif text-2xl text-white mb-2 uppercase tracking-[1px]">Get a Quote</h3>
-            <p className="text-[#888888] text-sm mb-6">Enter your email address to receive a quick quote.</p>
-            <form onSubmit={handleQuoteSubmit} className="flex flex-col gap-4">
-              <div>
-                <input 
-                  type="email" 
-                  value={quoteEmail}
-                  onChange={(e) => setQuoteEmail(e.target.value)}
-                  placeholder="Your Email Address" 
-                  required
-                  className="w-full bg-[#15110F] border border-[#2c241c] p-4 text-white placeholder-[#888888] focus:outline-none focus:border-[#c8956c] transition-colors"
-                />
+
+            <div className="mb-6">
+              <div className="text-[#c8956c] text-[11px] font-bold tracking-[2px] uppercase mb-1 flex items-center gap-2">
+                <FileText size={14} /> Official Export Catalogues
               </div>
+              <h3 className="font-serif text-2xl sm:text-3xl text-white uppercase tracking-[1px]">
+                Get Catalogues & Quotation
+              </h3>
+              <p className="text-[#a39a8c] text-sm mt-1">
+                Select the Indian handicraft catalogues you would like to receive. Catalogues are verified and unlocked in your account.
+              </p>
+            </div>
+
+            <form onSubmit={handleQuoteSubmit} className="flex flex-col gap-5">
+              {/* Client Info Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs uppercase tracking-wider text-[#c8956c] font-semibold mb-1.5">
+                    Email Address <span className="text-red-400">*</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    value={quoteEmail}
+                    onChange={(e) => setQuoteEmail(e.target.value)}
+                    placeholder="name@company.com" 
+                    required
+                    className="w-full bg-[#15110F] border border-[#2c241c] p-3 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-[#a39a8c] font-medium mb-1.5">
+                    Your Name
+                  </label>
+                  <input 
+                    type="text" 
+                    value={quoteName}
+                    onChange={(e) => setQuoteName(e.target.value)}
+                    placeholder="Full Name" 
+                    className="w-full bg-[#15110F] border border-[#2c241c] p-3 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-[#a39a8c] font-medium mb-1.5">
+                    Phone / WhatsApp
+                  </label>
+                  <input 
+                    type="tel" 
+                    value={quotePhone}
+                    onChange={(e) => setQuotePhone(e.target.value)}
+                    placeholder="+91 / Country Code & Number" 
+                    className="w-full bg-[#15110F] border border-[#2c241c] p-3 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Catalogue Selection Section */}
+              <div className="border-t border-[#2c241c] pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <span className="text-xs uppercase tracking-wider text-[#c8956c] font-semibold">
+                      Select Catalogues <span className="text-red-400">*</span>
+                    </span>
+                    <span className="text-[11px] text-[#888] ml-2">
+                      ({selectedCatalogues.length} of {AVAILABLE_CATALOGUES.length} selected)
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={toggleSelectAllCatalogues}
+                    className="text-xs text-[#c8956c] hover:underline cursor-pointer bg-transparent border-none p-0 font-medium"
+                  >
+                    {selectedCatalogues.length === AVAILABLE_CATALOGUES.length ? 'Deselect All' : 'Select All'}
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-2.5 max-h-[260px] overflow-y-auto pr-1">
+                  {AVAILABLE_CATALOGUES.map((cat) => {
+                    const isChecked = selectedCatalogues.includes(cat.id);
+                    return (
+                      <div
+                        key={cat.id}
+                        onClick={() => toggleCatalogue(cat.id)}
+                        className={'p-3 rounded border transition-all cursor-pointer flex items-start gap-3 ' + (isChecked ? 'bg-[#c8956c]/10 border-[#c8956c]' : 'bg-[#15110F] border-[#2c241c] hover:border-[#c8956c]/40')}
+                      >
+                        <div className="pt-0.5 shrink-0">
+                          {isChecked ? (
+                            <CheckSquare size={18} className="text-[#c8956c]" />
+                          ) : (
+                            <Square size={18} className="text-[#666]" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className={'text-sm font-medium ' + (isChecked ? 'text-white' : 'text-[#b5aaa0]')}>
+                              {cat.title}
+                            </span>
+                            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#2c241c] text-[#c8956c] shrink-0">
+                              PDF
+                            </span>
+                          </div>
+                          <p className="text-[12px] text-[#888] mt-0.5 leading-snug">
+                            {cat.subtitle}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Security & Verification Notice */}
+              <div className="bg-[#15110F] border border-[#2c241c] p-3 rounded flex items-start gap-2.5">
+                <ShieldCheck size={18} className="text-[#c8956c] shrink-0 mt-0.5" />
+                <div className="text-[11px] text-[#a39a8c] leading-relaxed">
+                  <strong className="text-[#ece6dc]">Admin Verification:</strong> To protect verified manufacturer pricing, full PDF catalogues are unlocked after verification. You will be able to view and download them in your <span className="text-[#c8956c]">Account Dashboard</span>.
+                </div>
+              </div>
+
+              {/* Submit Button */}
               <button 
                 type="submit" 
-                disabled={quoteSubmitting}
-                className="w-full bg-[#c8956c] text-[#110e0c] font-bold uppercase tracking-[2px] py-4 hover:bg-[#b5855c] transition-colors disabled:opacity-50"
+                disabled={quoteSubmitting || selectedCatalogues.length === 0}
+                className="w-full bg-[#c8956c] text-[#110e0c] font-bold uppercase tracking-[2px] py-3.5 hover:bg-[#b5855c] transition-colors disabled:opacity-50 cursor-pointer text-xs sm:text-sm mt-1"
               >
-                {quoteSubmitting ? 'Submitting...' : 'Submit Request'}
+                {quoteSubmitting ? 'Submitting Request...' : 'Submit Request (' + selectedCatalogues.length + ' Catalogues)'}
               </button>
             </form>
           </div>

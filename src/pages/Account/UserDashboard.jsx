@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, User, Heart, FileText, CheckCircle, Crown, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
+import { LogOut, User, Heart, FileText, CheckCircle, Crown, Sparkles, ExternalLink, ShieldCheck, BookOpen, Lock, Unlock, Download, Eye, AlertCircle } from 'lucide-react';
 import api from '../../config/api';
 import Swal from 'sweetalert2';
 
@@ -12,6 +12,7 @@ const UserDashboard = () => {
   const [quotations, setQuotations] = useState([]);
   const [orders, setOrders] = useState([]);
   const [memberships, setMemberships] = useState([]);
+  const [catalogueRequests, setCatalogueRequests] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
