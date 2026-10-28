@@ -5,6 +5,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { HEADER_LINKS } from '../../../constants/navigation';
 import api from '../../../config/api';
 import Swal from 'sweetalert2';
+import GoogleTranslate from '../../common/GoogleTranslate/GoogleTranslate';
 
 const Header = () => {
   const { user } = useAuth();
@@ -206,7 +207,8 @@ const Header = () => {
         })}
       </nav>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2.5 sm:gap-4">
+        <GoogleTranslate />
         <Link to="/account" className="hidden lg:flex items-center justify-center gap-2 border border-[#c8956c] text-[#c8956c] py-2 px-4 rounded-full text-[12px] tracking-[1px] hover:bg-[#c8956c] hover:text-[#110e0c] transition-all"><User size={16} />{user ? user.name.split(' ')[0] : 'LOGIN'}</Link>
         <Link to="/subscription" className="hidden lg:flex items-center justify-center border border-[#c8956c] text-[#c8956c] py-3 px-5 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]">SUBSCRIPTION</Link>
         <button className="hidden lg:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => setIsQuoteModalOpen(true)}>GET QUOTE</button>
