@@ -118,19 +118,19 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#15110F] flex justify-between items-center px-5 sm:px-8 lg:px-[60px] h-[70px] sm:h-[85px] font-sans border-b border-white/5 sticky top-0 z-50">
-      <Link to="/" className="flex items-center gap-4 no-underline group">
+    <header className="bg-[#15110F] flex justify-between items-center px-4 sm:px-6 xl:px-8 2xl:px-12 h-[70px] sm:h-[85px] font-sans border-b border-white/5 sticky top-0 z-50 w-full max-w-full box-border">
+      <Link to="/" className="flex items-center gap-3 sm:gap-4 no-underline group shrink-0 mr-2 xl:mr-5">
         <img src="/logo.png" alt="HIEIL Logo" className="w-8 h-8 sm:w-10 sm:h-10 stroke-[#c8956c] stroke-1 fill-none" />
-        <span className="text-[18px] sm:text-[22px] tracking-[4px] font-light text-white font-serif">HIEIL</span>
+        <span className="text-[18px] sm:text-[20px] 2xl:text-[22px] tracking-[3px] 2xl:tracking-[4px] font-light text-white font-serif shrink-0 whitespace-nowrap">HIEIL</span>
       </Link>
 
       {/* Desktop Nav */}
-      <nav className="hidden lg:flex gap-5 h-full items-center">
+      <nav className="hidden xl:flex gap-1 2xl:gap-3.5 h-full items-center shrink-0">
         {HEADER_LINKS.map((link) => {
           if (link.label === 'PRODUCTS') {
             return (
               <div key={link.label} className="relative h-full flex items-center group">
-                <Link to={link.href} className="text-[#b5aaa0] no-underline text-[11px] tracking-[1.5px] font-medium transition-colors duration-300 uppercase flex items-center gap-1.5 p-2.5 group-hover:text-[#c8956c]">
+                <Link to={link.href} className="text-[#b5aaa0] no-underline text-[11px] 2xl:text-[12px] tracking-[0.5px] 2xl:tracking-[1.2px] font-medium transition-colors duration-300 uppercase flex items-center gap-1 px-1.5 py-1.5 2xl:px-2.5 2xl:py-2 group-hover:text-[#c8956c] whitespace-nowrap">
                   {link.label}
                   <ChevronDown size={14} className="-mt-[1px]" />
                 </Link>
@@ -185,7 +185,7 @@ const Header = () => {
             <div key={link.label} className="relative h-full flex items-center group">
               {link.hasDropdown ? (
                 <>
-                  <Link to={link.href} className="text-[#b5aaa0] no-underline text-[11px] tracking-[1.5px] font-medium transition-colors duration-300 uppercase flex items-center gap-1.5 p-2.5 group-hover:text-[#c8956c]">
+                  <Link to={link.href} className="text-[#b5aaa0] no-underline text-[11px] 2xl:text-[12px] tracking-[0.5px] 2xl:tracking-[1.2px] font-medium transition-colors duration-300 uppercase flex items-center gap-1 px-1.5 py-1.5 2xl:px-2.5 2xl:py-2 group-hover:text-[#c8956c] whitespace-nowrap">
                     {link.label}
                     <ChevronDown size={14} className="-mt-[1px]" />
                   </Link>
@@ -198,7 +198,7 @@ const Header = () => {
                   </div>
                 </>
               ) : (
-                <Link to={link.href} className="text-[#b5aaa0] no-underline text-[11px] tracking-[1.5px] font-medium transition-colors duration-300 uppercase flex items-center gap-1.5 p-2.5 hover:text-[#c8956c]">
+                <Link to={link.href} className="text-[#b5aaa0] no-underline text-[11px] 2xl:text-[12px] tracking-[0.5px] 2xl:tracking-[1.2px] font-medium transition-colors duration-300 uppercase flex items-center gap-1 px-1.5 py-1.5 2xl:px-2.5 2xl:py-2 hover:text-[#c8956c] whitespace-nowrap">
                   {link.label}
                 </Link>
               )}
@@ -207,19 +207,19 @@ const Header = () => {
         })}
       </nav>
 
-      <div className="flex items-center gap-2.5 sm:gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-2.5 2xl:gap-3 shrink-0 ml-auto xl:ml-0">
         <GoogleTranslate />
-        <Link to="/account" className="hidden lg:flex items-center justify-center gap-2 border border-[#c8956c] text-[#c8956c] py-2 px-4 rounded-full text-[12px] tracking-[1px] hover:bg-[#c8956c] hover:text-[#110e0c] transition-all"><User size={16} />{user ? user.name.split(' ')[0] : 'LOGIN'}</Link>
-        <Link to="/subscription" className="hidden lg:flex items-center justify-center border border-[#c8956c] text-[#c8956c] py-3 px-5 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c]">SUBSCRIPTION</Link>
-        <button className="hidden lg:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-3 px-7 text-[12px] tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c]" onClick={() => setIsQuoteModalOpen(true)}>GET QUOTE</button>
-        <button className="block lg:hidden bg-transparent border-none text-[#c8956c] cursor-pointer p-1" onClick={toggleMobileMenu} aria-label="Toggle menu">
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        <Link to="/account" className="hidden sm:flex items-center justify-center gap-1.5 border border-[#c8956c] text-[#c8956c] py-1.5 px-3 2xl:py-2 2xl:px-4 rounded-full text-[11px] 2xl:text-[12px] tracking-[1px] hover:bg-[#c8956c] hover:text-[#110e0c] transition-all shrink-0 whitespace-nowrap"><User size={15} />{user ? user.name.split(' ')[0] : 'LOGIN'}</Link>
+        <Link to="/subscription" className="hidden xl:flex items-center justify-center border border-[#c8956c] text-[#c8956c] py-1.5 px-3 2xl:py-2.5 2xl:px-4 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c] shrink-0 whitespace-nowrap">SUBSCRIPTION</Link>
+        <button className="hidden sm:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-1.5 px-3.5 2xl:py-2.5 2xl:px-6 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c] shrink-0 whitespace-nowrap" onClick={() => setIsQuoteModalOpen(true)}>GET QUOTE</button>
+        <button className="block xl:hidden bg-transparent border-none text-[#c8956c] cursor-pointer p-1 shrink-0 ml-1" onClick={toggleMobileMenu} aria-label="Toggle menu">
+          {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
       {/* Mobile Nav Overlay */}
       {isMobileMenuOpen && (
-        <div className="block lg:hidden absolute top-[70px] sm:top-[85px] left-0 right-0 bg-[#110e0c] px-5 py-5 pb-8 sm:px-[30px] sm:py-[20px] sm:pb-[40px] border-b border-white/5 z-40 shadow-[0_4px_20px_rgba(0,0,0,0.5)] h-[calc(100vh-70px)] sm:h-[calc(100vh-85px)] overflow-y-auto">
+        <div className="block xl:hidden absolute top-[70px] sm:top-[85px] left-0 right-0 bg-[#110e0c] px-5 py-5 pb-8 sm:px-[30px] sm:py-[20px] sm:pb-[40px] border-b border-white/5 z-40 shadow-[0_4px_20px_rgba(0,0,0,0.5)] h-[calc(100vh-70px)] sm:h-[calc(100vh-85px)] overflow-y-auto">
           <div className="flex flex-col gap-2.5">
             {HEADER_LINKS.map((link) => (
               <div key={link.label} className="flex flex-col">
