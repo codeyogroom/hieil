@@ -209,7 +209,14 @@ const Header = () => {
 
       <div className="flex items-center gap-1.5 sm:gap-2.5 2xl:gap-3 shrink-0 ml-auto xl:ml-0">
         <GoogleTranslate />
-        <Link to="/account" className="hidden sm:flex items-center justify-center gap-1.5 border border-[#c8956c] text-[#c8956c] py-1.5 px-3 2xl:py-2 2xl:px-4 rounded-full text-[11px] 2xl:text-[12px] tracking-[1px] hover:bg-[#c8956c] hover:text-[#110e0c] transition-all shrink-0 whitespace-nowrap"><User size={15} />{user ? user.name.split(' ')[0] : 'LOGIN'}</Link>
+        <Link 
+          to="/account" 
+          className="hidden sm:flex items-center justify-center border border-[#c8956c] text-[#c8956c] w-8 h-8 2xl:w-9 2xl:h-9 rounded-full hover:bg-[#c8956c] hover:text-[#110e0c] transition-all shrink-0" 
+          title={user ? `Account (${user.name})` : 'Account / Login'}
+          aria-label="Account"
+        >
+          <User size={16} />
+        </Link>
         <Link to="/subscription" className="hidden xl:flex items-center justify-center border border-[#c8956c] text-[#c8956c] py-1.5 px-3 2xl:py-2.5 2xl:px-4 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-[#c8956c] hover:text-[#110e0c] shrink-0 whitespace-nowrap">SUBSCRIPTION</Link>
         <button className="hidden sm:block bg-[#c8956c] text-[#110e0c] border border-[#c8956c] py-1.5 px-3.5 2xl:py-2.5 2xl:px-6 text-[11px] 2xl:text-[12px] tracking-[1px] 2xl:tracking-[2px] cursor-pointer uppercase font-bold transition-all duration-300 hover:bg-transparent hover:text-[#c8956c] shrink-0 whitespace-nowrap" onClick={() => setIsQuoteModalOpen(true)}>GET QUOTE</button>
         <button className="block xl:hidden bg-transparent border-none text-[#c8956c] cursor-pointer p-1 shrink-0 ml-1" onClick={toggleMobileMenu} aria-label="Toggle menu">
