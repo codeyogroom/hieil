@@ -1451,6 +1451,1197 @@ export const pageConfigs = [
           type: 'icon-picker', 
           formLabel: 'Select Icon',
           render: (val) => {
+            const IconComp = (val && FaIcons && FaIcons[val]) ? FaIcons[val] : (FaFileAlt || FaIcons.FaFileAlt);
+            return IconComp ? React.createElement(IconComp, { style: { color: '#f59e0b', fontSize: '18px' } }) : null;
+          }
+        },
+        { key: 'title', label: 'Title', formLabel: 'Title', placeholder: 'Enter Title', minWidth: '150px' },
+        { key: 'description', label: 'Description', type: 'textarea', formLabel: 'Description', placeholder: 'Enter Description', minWidth: '150px' },
+        { key: 'point1', label: 'Point 1', formLabel: 'Point 1', placeholder: 'Enter Point 1', minWidth: '120px' },
+        { key: 'point2', label: 'Point 2', formLabel: 'Point 2', placeholder: 'Enter Point 2', minWidth: '120px' },
+        { key: 'point3', label: 'Point 3', formLabel: 'Point 3', placeholder: 'Enter Point 3', minWidth: '120px' },
+        { 
+          key: 'pdfFile', 
+          label: 'PDF File', 
+          type: 'file', 
+          formLabel: 'Upload PDF',
+          render: (val) => React.createElement('a', {
+            href: val || '#',
+            target: '_blank',
+            rel: 'noreferrer',
+            style: {
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              backgroundColor: '#06b6d4',
+              color: 'white',
+              padding: '6px 12px',
+              borderRadius: '4px',
+              textDecoration: 'none',
+              fontSize: '13px',
+              fontWeight: '500'
+            }
+          }, React.createElement(FaFileAlt, null), 'View PDF')
+        }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-warning',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'artisan', 
+    title: 'Artisan Content',
+    singularTitle: 'Artisan',
+    breadcrumbParent: 'Our Artisan',
+    formTitleAdd: 'Add Artisan Video',
+    formTitleEdit: 'Edit Artisan Video',
+    formCardTitle: 'ADD ARTISAN CONTENT',
+    columns: {
+      title: 'CONTENT LIST',
+      icon: 'users',
+      addButtonText: 'Add New Artisan',
+      formSubmitText: 'Submit',
+      headers: [
+        { key: 'id', label: 'ID' },
+        { 
+          key: 'preview', 
+          label: 'Preview', 
+          type: 'file', 
+          formLabel: 'Video/Image File',
+          render: (val) => React.createElement('img', {
+            src: formatImageUrl(val) || 'https://via.placeholder.com/80x60?text=Img', 
+            alt: 'Preview', 
+            style: {width: '80px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e5e7eb'}
+          }) 
+        },
+        { key: 'title', label: 'Title', formLabel: 'Artisan Title', placeholder: 'Enter artisan title' },
+        { key: 'description', label: 'Description', type: 'textarea', formLabel: 'Artisan Description', placeholder: 'Enter artisan description' },
+        { key: 'text', label: 'Text', formLabel: 'Artisan Text', placeholder: 'Enter artisan text', minWidth: '400px' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-warning',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'leaders', 
+    title: 'Manage Leaders',
+    singularTitle: 'Leader',
+    breadcrumbParent: 'Leaders',
+    formTitleAdd: 'Add Leader',
+    formTitleEdit: 'Edit Leader',
+    formCardTitle: 'ADD LEADER DETAILS',
+    columns: {
+      title: 'LEADER LIST',
+      icon: 'users',
+      addButtonText: 'Add Leader',
+      headers: [
+        { key: 'id', label: '#' },
+        { 
+          key: 'photo', 
+          label: 'Photo', 
+          type: 'file', 
+          formLabel: 'Leader Photo',
+          render: (val) => React.createElement('img', {
+            src: formatImageUrl(val) || 'https://via.placeholder.com/60x60?text=Photo', 
+            alt: 'Leader', 
+            style: {width: '60px', height: '60px', objectFit: 'cover', borderRadius: '50%'}
+          }) 
+        },
+        { key: 'name', label: 'Name', formLabel: 'Leader Name', placeholder: 'Enter leader name' },
+        { key: 'role', label: 'Role', formLabel: 'Leader Designation', placeholder: 'Enter leader designation' },
+        { key: 'description', label: 'Description', type: 'textarea', formLabel: 'Leader Description', placeholder: 'Enter leader description', minWidth: '400px' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-warning',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+
+  { 
+    path: 'gallery', 
+    title: 'Show Gallery',
+    singularTitle: 'Gallery',
+    breadcrumbParent: 'Gallery',
+    formTitleAdd: 'Add Gallery',
+    formTitleEdit: 'Edit Gallery',
+    formCardTitle: 'ADD GALLERY ITEM',
+    columns: {
+      title: 'Gallery List',
+      addButtonText: 'Add Gallery',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'category', label: 'Category', type: 'select', options: ['HANDCRAFTED WOODEN PRODUCTS', 'HANDCRAFTED METAL PRODUCTS'], formLabel: 'Select Category', placeholder: ' ' },
+        { key: 'image', label: 'Image', type: 'file', formLabel: 'Upload Image', render: (val) => React.createElement('img', {src: formatImageUrl(val) || 'https://via.placeholder.com/60x40?text=Img', alt: 'Gallery', style: {width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px'}}) },
+        { key: 'title', label: 'Title', formLabel: 'Title', placeholder: ' ' },
+        { key: 'tagline', label: 'Tagline', formLabel: 'Tagline (e.g. 200+ DESIGNS)', placeholder: '200+ DESIGNS' }
+      ],
+      hideDefaultActions: false
+    }, 
+    data: []
+  },
+  { 
+    path: 'gallery-category', 
+    title: 'Gallery Categories', 
+    singularTitle: 'Gallery Category',
+    breadcrumbParent: 'Gallery Categories',
+    formTitleAdd: 'Add Gallery Category',
+    formTitleEdit: 'Edit Gallery Category',
+    formCardTitle: 'ADD CATEGORY',
+    columns: {
+      title: 'CATEGORY LIST',
+      addButtonText: 'Add Category',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'categoryName', label: 'Category', formLabel: 'Category Name', placeholder: 'Enter Gallery Category' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-primary',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'faq-category', 
+    title: 'FAQ CATEGORY LIST', 
+    subtitle: 'FAQ CATEGORY LIST',
+    columns: {
+      title: 'All FAQ Categories',
+      addButtonText: 'Add New',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'category', label: 'Category', formLabel: 'Category Name', placeholder: 'Enter category name' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-primary',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'faq', 
+    title: 'FAQ List', 
+    subtitle: 'FAQ List',
+    columns: {
+      title: 'ALL FAQ',
+      addButtonText: 'Add FAQ',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'category', label: 'Category', formLabel: 'Select Category', type: 'select', options: [] },
+        { key: 'question', label: 'Question', placeholder: ' ' },
+        { key: 'answer', label: 'Answer', type: 'textarea', placeholder: ' ' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '30px', margin: '0 auto'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-warning',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'certifications', 
+    title: 'Certificate List', 
+    subtitle: 'Certificate List',
+    columns: {
+      title: 'ALL CERTIFICATES',
+      addButtonText: 'Add New Certificate',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'title', label: 'Title', formLabel: 'Certificate Title (e.g. Importer Exporter Code)' },
+        { key: 'subtitle', label: 'Subtitle', formLabel: 'Subtitle (e.g. IEC Certificate)' },
+        { key: 'description', label: 'Description', formLabel: 'Description', type: 'textarea' },
+        { key: 'icon', label: 'Icon Name', formLabel: 'Lucide Icon Name (e.g. ShieldCheck, FileCheck2, Landmark, BadgeCheck)' },
+        { key: 'pdfUrl', label: 'Upload Certificate (PDF/Image)', type: 'file', hideInTable: true },
+        { key: 'preview', label: 'Preview', hideInForm: true, render: (val, row) => React.createElement('button', {
+            className: 'modern-action-btn btn-primary',
+            onClick: () => window.open(row.pdfUrl ? formatImageUrl(row.pdfUrl) : 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')
+          }, React.createElement(FaEye, null), ' View') 
+        },
+        { key: 'download', label: 'Download', hideInForm: true, render: (val, row) => React.createElement('button', {
+            className: 'modern-action-btn btn-success',
+            onClick: async () => {
+              const dummyPdf = 'data:application/pdf;base64,JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDU1ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDAgMCAwIHJnCiAgICAoRHVtbXkgUERGIFRlc3QpIFRqCiAgRVQKZW5kc3RyZWFtCmVuZG9iagoKeHJlZgowIDUKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDE4IDAwMDAwIG4gCjAwMDAwMDAwNzcgMDAwMDAgbiAKMDAwMDAwMDE3OCAwMDAwMCBuIAowMDAwMDAwNDU3IDAwMDAwIG4gCnRyYWlsZXIKICA8PCAgL1Jvb3QgMSAwIFIKICAgICAgL1NpemUgNQogID4+CnN0YXJ0eHJlZgo1NjUKJSVFT0YK';
+              const fileUrl = row.pdfUrl ? formatImageUrl(row.pdfUrl) : dummyPdf;
+              
+              if (fileUrl.startsWith('data:')) {
+                const link = document.createElement('a');
+                link.href = fileUrl;
+                link.download = row.title + '.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                return;
+              }
+
+              try {
+                const response = await fetch(fileUrl);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = row.title + '.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+              } catch (err) {
+                console.error("Fetch download failed (likely CORS), falling back to open:", err);
+                const fallbackLink = document.createElement('a');
+                fallbackLink.href = fileUrl;
+                fallbackLink.download = row.title + '.pdf';
+                fallbackLink.target = '_blank';
+                document.body.appendChild(fallbackLink);
+                fallbackLink.click();
+                document.body.removeChild(fallbackLink);
+              }
+            }
+          }, React.createElement(FaDownload, null), ' Download') 
+        }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-warning',
+          onClick: () => handlers?.onEdit && handlers.onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  {
+    path: 'download-leads',
+    title: 'Certificate Downloads',
+    subtitle: 'List of users who downloaded certificates',
+    columns: {
+      title: 'DOWNLOAD LEADS',
+      addButtonText: '', // No add button needed for leads
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'name', label: 'Name', formLabel: 'Name' },
+        { key: 'mobile', label: 'Mobile', formLabel: 'Mobile' },
+        { key: 'email', label: 'Email', formLabel: 'Email' },
+        { key: 'certificateTitle', label: 'Certificate', formLabel: 'Certificate Title' },
+        { key: 'createdAt', label: 'Downloaded At', hideInForm: true, render: (val) => new Date(val).toLocaleString() }
+      ],
+      hideDefaultActions: true,
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          onClick: () => handlers?.onDelete && handlers.onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    },
+    data: []
+  },
+
+  { 
+    path: 'contact', 
+    title: 'Contact Messages', 
+    subtitle: 'Contact Messages',
+    columns: {
+      title: React.createElement('div', {style: {display: 'flex', alignItems: 'center', gap: '8px'}}, 
+        React.createElement(FaEnvelope, null), 
+        'Contact Message Details',
+        React.createElement('style', null, `
+          .generic-list-page .data-table th {
+            background-color: #374151 !important;
+            color: #ffffff !important;
+            border-bottom: none !important;
+          }
+          .generic-list-page .data-table th, .generic-list-page .data-table td {
+            white-space: nowrap;
+            min-width: 150px;
+            padding: 12px 20px !important;
+          }
+        `)
+      ),
+      headers: [
+        { key: 'id', label: 'ID' },
+        { key: 'fullName', label: 'Full Name' },
+        { key: 'email', label: 'Email' },
+        { key: 'phone', label: 'Phone' },
+        { key: 'country', label: 'Country' },
+          { key: 'message', label: 'Message' },
+        { key: 'createdAt', label: 'Created At' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, { onDelete }) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        row.phone && React.createElement('button', {
+          className: 'modern-action-btn btn-success',
+          title: 'WhatsApp',
+          onClick: () => window.open(`https://wa.me/${row.phone.replace(/[^0-9]/g, '')}`, '_blank')
+        }, React.createElement(FaWhatsapp, null)),
+        row.phone && React.createElement('button', {
+          className: 'modern-action-btn btn-primary',
+          title: 'Call',
+          onClick: () => window.open(`tel:${row.phone}`, '_self')
+        }, React.createElement(FaPhone, null)),
+        row.email && React.createElement('button', {
+          className: 'modern-action-btn btn-primary',
+          title: 'Email',
+          onClick: () => window.open(`mailto:${row.email}`, '_blank')
+        }, React.createElement(FaEnvelope, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          title: 'Delete Message',
+          onClick: () => onDelete && onDelete(row)
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'service-inquiries', 
+    title: 'Service Inquiries', 
+    subtitle: 'Service Inquiries',
+    columns: {
+      title: 'SERVICE INQUIRY LIST',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'service', label: 'Service / Sub-Service', render: (val) => React.createElement('span', {style: {backgroundColor: '#14b8a6', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px'}}, val) },
+        { key: 'customer', label: 'Customer Details', render: (val, row) => React.createElement('div', {style: {lineHeight: '1.6'}}, 
+            React.createElement('div', {style: {fontWeight: 'bold', color: '#111827'}}, row.customerName),
+            React.createElement('div', {style: {display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px'}}, React.createElement(FaEnvelope, {style: {color: '#6366f1'}}), row.email),
+            React.createElement('div', {style: {display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#dc2626'}}, React.createElement(FaPhone, null), row.phone)
+          ) 
+        },
+        { key: 'location', label: 'Location' },
+        { key: 'message', label: 'Message' },
+        { key: 'document', label: 'Document', render: (val) => val ? React.createElement('a', {href: val, target: '_blank', style: {color: '#3b82f6', textDecoration: 'underline'}}, 'View Document') : 'No Document' },
+        { key: 'date', label: 'Date' }
+      ],
+      hideDefaultActions: true,
+      actions: (row, context = {}) => React.createElement('div', {style: {display: 'flex'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-success',
+          title: 'Call Now',
+          onClick: () => window.open(`tel:${row.phone}`, '_self')
+        }, React.createElement(FaPhone, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-primary',
+          title: 'Send Email',
+          onClick: () => window.open(`mailto:${row.email}`, '_blank')
+        }, React.createElement(FaEnvelope, null)),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          title: 'Delete',
+          onClick: () => {
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "Do you want to delete this inquiry?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#ef4444',
+              cancelButtonColor: '#6b7280',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                if(context.onDelete) context.onDelete(row);
+                else alert(`Delete Inquiry ID: ${row.id}`);
+              }
+            });
+          }
+        }, React.createElement(FaTrash, null))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'download-leads', 
+    title: 'Download Leads', 
+    subtitle: 'Download Leads',
+    columns: {
+      title: 'LEADS LIST',
+      headers: [
+        { key: 'id', label: 'ID' },
+        { key: 'email', label: 'Email' },
+        { key: 'fileSource', label: 'File Source', render: (val) => React.createElement('a', {href: '#', style: {color: '#3b82f6', textDecoration: 'none'}}, val) },
+        { key: 'date', label: 'Date' }
+      ],
+      hideDefaultActions: true
+    }, 
+    data: []
+  },
+  { 
+    path: 'vendor-management/master', 
+    apiEndpoint: '/vendors',
+    title: 'Vendor Master', 
+    singularTitle: 'Vendor',
+    subtitle: 'Vendor Master',
+    formTitleAdd: 'Add Vendor',
+    formTitleEdit: 'Edit Vendor',
+    formCardTitle: 'ADD VENDOR',
+    formFields: [
+      { name: 'vendorName', label: 'Vendor Name', type: 'text', required: true, width: 'full' },
+      { name: 'amount', label: 'Amount', type: 'text', required: true, width: 'half' },
+      { name: 'email', label: 'Email', type: 'email', width: 'half' },
+      { name: 'phone', label: 'Phone', type: 'text', width: 'half' },
+      { name: 'status', label: 'Status', type: 'select', options: ['ACTIVE', 'INACTIVE'], default: 'ACTIVE', width: 'half' }
+    ],
+    columns: {
+      title: 'VENDOR LIST',
+      addButtonText: 'Add Vendor',
+      formSubmitText: 'Save Vendor',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'vendorName', label: 'Vendor Name' },
+        { key: 'amount', label: 'Amount' }
+      ],
+      hideDefaultActions: false
+    }, 
+    data: []
+  },
+  { 
+    path: 'vendor-management/report', 
+    title: 'Vendor Report', 
+    subtitle: 'Vendor Report',
+    columns: {
+      title: 'VENDOR SUMMARY',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'vendorName', label: 'Vendor Name' },
+        { key: 'totalInvoices', label: 'Total Invoices' },
+        { key: 'totalInvoiceAmount', label: 'Total Invoice Amount' },
+        { key: 'totalCommission', label: 'Total Amount' },
+        { key: 'totalPayout', label: 'Total Payout', render: (val) => React.createElement('strong', null, val) },
+        { key: 'released', label: 'Released', render: (val) => React.createElement('span', {style: {color: '#22c55e'}}, val) },
+        { key: 'pending', label: 'Pending', render: (val) => React.createElement('span', {style: {color: '#f59e0b'}}, val) }
+      ],
+      hideDefaultActions: true
+    }, 
+    data: []
+  },
+  { 
+    path: 'vendor-management/payout', 
+      title: 'Vendor Payout', 
+      subtitle: 'Vendor Payout',
+      columns: {
+        title: 'PAYOUT LIST',
+        headers: [
+          { key: 'id', label: '#' },
+          { key: 'vendorId', label: 'Vendor', render: (val) => React.createElement(VendorNameDisplay, { vendorId: val }) },
+          { key: 'createdAt', label: 'Date', render: (val) => val ? new Date(val).toLocaleDateString('en-IN') : '-' },
+        { key: 'invoiceId', label: 'Invoice ID' },
+        { key: 'invoiceAmount', label: 'Invoice Amount' },
+        { key: 'commission', label: 'Amount' },
+        { key: 'payoutAmount', label: 'Payout Amount', render: (val) => React.createElement('strong', null, val) },
+        { key: 'status', label: 'Status', type: 'select', options: ['Pending', 'Released'] }
+      ],
+      hideDefaultActions: true,
+      actions: (row) => React.createElement('div', {style: {display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '80px'}},
+          React.createElement('button', {
+              className: 'modern-action-btn btn-primary',
+              onClick: () => window.open(`/admin/vendor-management/payout-preview/${row._id}`, '_blank')
+          }, React.createElement(FaFileAlt, null), ' PDF')
+        )
+    }, 
+    data: []
+  },
+  { 
+    path: 'retailer-system/product-inquiries', 
+    title: 'Retailer System - Inquiries', 
+    subtitle: 'Retailer Inquiries',
+    columns: {
+      title: 'RETAILER INQUIRY LIST',
+      headers: [
+        { key: 'id', label: 'ID' },
+        { key: 'product', label: 'Product', render: (val, row) => React.createElement('div', null, React.createElement('div', {style: {marginBottom: '6px', color: '#334155'}}, row.productName), React.createElement('div', {style: {color: '#6b7280', fontSize: '13px'}}, 'ID: ' + row.productId)) },
+        { key: 'customer', label: 'Customer', render: (val, row) => React.createElement('div', {style: {maxWidth: '80px', lineHeight: '1.4'}}, row.customer) },
+        { key: 'contact', label: 'Contact', render: (val, row) => React.createElement('div', {style: {lineHeight: '1.8', fontSize: '13px'}}, 
+            React.createElement('div', null, '📧 ' + row.email),
+            React.createElement('div', null, '📞 ' + row.phone),
+            React.createElement('div', null, '💬 ' + row.altPhone)
+        ) },
+        { key: 'location', label: 'Location', render: (val, row) => React.createElement('div', {style: {maxWidth: '120px', lineHeight: '1.4'}}, row.location) },
+        { key: 'orderType', label: 'Order Type', render: (val) => React.createElement('span', {className: 'modern-action-btn btn-primary'}, val) },
+        { key: 'qty', label: 'Qty' },
+        { key: 'budget', label: 'Budget' },
+        { key: 'date', label: 'Date', render: (val, row) => React.createElement('div', {style: {maxWidth: '40px', lineHeight: '1.4'}}, row.date) }
+      ],
+      actions: (row, { onDelete }) => React.createElement('div', {style: {display: 'flex', gap: '5px'}},
+        React.createElement('button', {
+          className: 'modern-action-btn btn-success',
+          onClick: async () => {
+            try {
+              if (row.quotationId) {
+                const result = await Swal.fire({
+                  title: 'Quotation Already Exists',
+                  html: `A quotation (ID: <b>${row.quoteNo || 'Unknown'}</b>) already exists for this inquiry.`,
+                  icon: 'info',
+                  showCancelButton: true,
+                  confirmButtonText: 'Want to Edit/View',
+                  cancelButtonText: 'Cancel'
+                });
+                if (result.isConfirmed) {
+                  window.location.href = `/admin/retailer-system/quotations?search=${row.quoteNo || ''}`;
+                }
+              } else {
+                window.location.href = `/admin/retailer-system/product-inquiries/create-quotation/${row.id || row._id}`;
+              }
+            } catch (e) {
+              console.error(e);
+              window.location.href = `/admin/retailer-system/product-inquiries/create-quotation/${row.id || row._id}`;
+            }
+          }
+        }, '📄 Create Quotation'),
+        React.createElement('button', {
+          className: 'modern-action-btn btn-danger',
+          title: 'Delete Inquiry',
+          onClick: () => onDelete && onDelete(row)
+        }, React.createElement(FaTrash, {style: {fontSize: '14px'}}))
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'retailer-system/orders', 
+    title: 'Retailer System - Orders', 
+    subtitle: 'Retailer Orders',
+    columns: {
+      title: 'RETAILER ORDER LIST',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'orderNo', label: 'Order No' },
+        { key: 'quotation', label: 'Quotation' },
+        { key: 'incoterm', label: 'Incoterm', type: 'select', options: [{ value: 'FOB', label: 'FOB (Free On Board)' }, { value: 'EXW', label: 'EXW (Ex Works)' }, { value: 'CIF', label: 'CIF (Cost, Insurance, and Freight)' }, { value: 'DDP', label: 'DDP (Delivered Duty Paid)' }, { value: 'DAP', label: 'DAP (Delivered at Place)' }, { value: 'FCA', label: 'FCA (Free Carrier)' }, { value: 'CPT', label: 'CPT (Carriage Paid To)' }, { value: 'CIP', label: 'CIP (Carriage and Insurance Paid To)' }, { value: 'CFR', label: 'CFR (Cost and Freight)' }, { value: 'FAS', label: 'FAS (Free Alongside Ship)' }] },
+        { key: 'deliveryPort', label: 'Port', formLabel: 'Delivery Port (e.g., JNPT Mumbai)' },
+        { key: 'status', label: 'Status', render: (val) => {
+            if (val === 'Processing') {
+              return React.createElement('span', {className: 'modern-action-btn btn-success'}, val);
+            }
+            return React.createElement('span', {className: 'modern-action-btn btn-success'});
+          } 
+        },
+        { key: 'date', label: 'Date' }
+      ]
+    }, 
+    data: []
+  },
+  { 
+    path: 'retailer-system/quotations', 
+    title: 'Retailer System - Quotations', 
+    subtitle: 'Retailer Quotations',
+    columns: {
+      title: 'RETAILER QUOTATION LIST',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'quoteNo', label: 'Quote No', render: (val) => React.createElement('div', {style: {maxWidth: '120px', wordWrap: 'break-word'}}, val) },
+        { key: 'customer', label: 'Customer' },
+        { key: 'product', label: 'Product' },
+        { key: 'qty', label: 'Qty' },
+        { key: 'total', label: 'Total' },
+        { key: 'status', label: 'Status', render: (val) => {
+            if (val === 'Accepted') {
+              return React.createElement('span', {className: 'modern-action-btn btn-success'}, val);
+            }
+            return val;
+          } 
+        },
+        { key: 'date', label: 'Date', render: (val) => React.createElement('div', {style: {maxWidth: '60px'}}, val) }
+      ],
+      hideDefaultActions: true,
+      actions: (row) => React.createElement('button', {
+        className: 'modern-action-btn btn-primary',
+        onClick: () => window.location.href = `/admin/retailer-system/quotations/preview/${row._id}`
+      }, '📄')
+    }, 
+    data: []
+  },
+  { 
+    path: 'retailer-system/invoices', 
+    title: 'Retailer System - Invoices', 
+    subtitle: 'Retailer Invoices',
+    columns: {
+      title: 'RETAILER INVOICE LIST',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'invoiceNo', label: 'Invoice No', render: (val) => React.createElement('div', {style: {maxWidth: '130px', wordWrap: 'break-word'}}, val) },
+        { key: 'orderNo', label: 'Order No', render: (val) => React.createElement('div', {style: {maxWidth: '130px', wordWrap: 'break-word'}}, val) },
+        { key: 'customer', label: 'Customer' },
+        { key: 'country', label: 'Country' },
+        { key: 'total', label: 'Total' },
+        { key: 'vendorId', label: 'Assigned Vendor', render: (val) => React.createElement(VendorNameDisplay, { vendorId: val, fallbackStyle: { color: '#16a34a', fontWeight: 'bold' } }) },
+        { key: 'status', label: 'Status', render: (val, row, handlers) => {
+              let bg = '#fef08a';
+              let color = '#854d0e';
+              if (val === 'Full Paid' || val === 'Paid') { bg = '#dcfce7'; color = '#166534'; }
+                else if (val === 'Partial Paid') { bg = '#fef3c7'; color = '#92400e'; }
+              else if (val === 'Cancelled') { bg = '#fee2e2'; color = '#991b1b'; }
+              
+              const arrowSvg = `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E`;
+
+              return React.createElement('select', {
+                value: val || 'Pending',
+                style: {
+                  backgroundColor: bg, 
+                  color: color, 
+                  padding: '6px 28px 6px 12px', 
+                  borderRadius: '16px', 
+                  fontSize: '12px', 
+                  fontWeight: '600',
+                  border: '1px solid ' + bg,
+                  outline: 'none',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                  backgroundImage: `url("${arrowSvg}")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 8px center',
+                  backgroundSize: '12px'
+                },
+                onChange: (e) => {
+                  const newStatus = e.target.value;
+                  if (handlers && handlers.onUpdateRow) {
+                    handlers.onUpdateRow(row._id, 'status', newStatus);
+                  } else {
+                    api.put(`/invoices/${row._id}`, { status: newStatus })
+                      .then(() => window.location.reload())
+                      .catch(err => {
+                        console.error(err);
+                        alert('Failed to update status');
+                      });
+                  }
+                }
+              },
+                React.createElement('option', {value: 'Pending'}, 'Pending'),
+                React.createElement('option', {value: 'Partial Paid'}, 'Partial Paid'),
+                  React.createElement('option', {value: 'Full Paid'}, 'Full Paid'),
+                React.createElement('option', {value: 'Cancelled'}, 'Cancelled')
+              );
+            }
+        }
+      ],
+      hideDefaultActions: true,
+      actions: (row) => React.createElement('div', {style: {display: 'flex', flexWrap: 'wrap', gap: '5px', maxWidth: '160px'}}, 
+        !row.vendorId && React.createElement('button', {
+            className: 'modern-action-btn btn-neutral',
+            onClick: async () => {
+              try {
+                const res = await api.get('/vendors');
+                const vendors = Array.isArray(res.data) ? res.data : (res.data.data || []);
+                let options = '<option value="">Select a vendor...</option>';
+                vendors.forEach(v => { options += `<option value="${v._id}">${v.vendorName} ${v.amount ? `(${v.amount})` : (v.commission ? `(${v.commission}%)` : '')}</option>`; });
+                const { value: vendorId } = await Swal.fire({
+                  title: 'Assign Vendor',
+                  html: `<select id="vendor-select" class="swal2-input">${options}</select>`,
+                  focusConfirm: false,
+                  showCancelButton: true,
+                  preConfirm: () => document.getElementById('vendor-select').value
+                });
+                if (vendorId) {
+                  try {
+                    await api.put(`/invoices/${row._id}`, { vendorId });
+                    
+                    let linkedOrderId = null;
+                    try {
+                      const ordersRes = await api.get('/orders');
+                      const orderData = (Array.isArray(ordersRes.data) ? ordersRes.data : ordersRes.data.data) || [];
+                      const matchedOrder = orderData.find(o => o.orderNo === row.orderNo);
+                      if (matchedOrder) {
+                        linkedOrderId = matchedOrder._id;
+                      }
+                    } catch(e) {}
+                    
+                    await api.post('/vendor-orders', {
+                        poNumber: 'PO-' + row.orderNo,
+                        vendorId: vendorId,
+                        orderId: linkedOrderId,
+                        agreedPriceInr: row.total || 0,
+                        status: 'Pending',
+                        installments: []
+                    });
+                    
+                    Swal.fire('Assigned!', 'Vendor assigned & PO created successfully.', 'success').then(() => window.location.reload());
+                  } catch (assignErr) {
+                    Swal.fire('Error', 'Failed to assign vendor or create PO', 'error');
+                  }
+                }
+              } catch (e) { Swal.fire('Error', 'Failed to load vendors', 'error'); }
+            }
+        }, 'Assign Vendor'),
+        React.createElement('button', {
+            className: 'modern-action-btn btn-primary',
+            onClick: () => alert(`Generating PDF for ${row.invoiceNo}`)
+        }, '📄 PDF'),
+        React.createElement('button', {
+            className: 'modern-action-btn btn-primary',
+            onClick: () => alert(`Viewing Shipping for ${row.invoiceNo}`)
+        }, '🚚 Shipping')
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'retailer-system/payments', 
+    title: 'Retailer System - Payments', 
+    subtitle: 'Retailer Payments',
+    columns: {
+      title: 'RETAILER PAYMENTS LIST',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'invoiceNo', label: 'Invoice No' },
+        { key: 'orderNo', label: 'Order No' },
+        { key: 'mode', label: 'Mode' },
+        { key: 'reference', label: 'Reference' },
+        { key: 'amount', label: 'Amount' },
+        { key: 'status', label: 'Status', render: (val, row, handlers) => {
+            let bg = '#f3f4f6';
+            let color = '#374151';
+            if (val === 'Full Paid' || val === 'Paid') { bg = '#dcfce7'; color = '#166534'; }
+                else if (val === 'Partial Paid') { bg = '#fef3c7'; color = '#92400e'; }
+            else if (val === 'Failed') { bg = '#fee2e2'; color = '#991b1b'; }
+            else if (val === 'Refunded') { bg = '#fef08a'; color = '#854d0e'; }
+            
+            const arrowSvg = `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E`;
+            
+            return React.createElement('select', {
+              value: val || 'Pending',
+              style: {
+                backgroundColor: bg,
+                color: color,
+                padding: '6px 28px 6px 12px',
+                borderRadius: '16px',
+                fontSize: '12px',
+                fontWeight: '600',
+                border: '1px solid ' + bg,
+                outline: 'none',
+                cursor: 'pointer',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                backgroundImage: `url("${arrowSvg}")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 8px center',
+                backgroundSize: '14px',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+              },
+              onChange: (e) => {
+                const newStatus = e.target.value;
+                if (handlers && handlers.onUpdateRow) {
+                  handlers.onUpdateRow(row._id, 'status', newStatus);
+                } else {
+                  api.put(`/retailer/payments/${row._id}`, { status: newStatus })
+                    .then(() => window.location.reload())
+                    .catch(err => alert('Error updating status: ' + err.message));
+                }
+              }
+            }, 
+            React.createElement('option', {value: 'Pending', style: {color: 'black', backgroundColor: 'white'}}, 'Pending'),
+            React.createElement('option', {value: 'Paid', style: {color: 'black', backgroundColor: 'white'}}, 'Paid'),
+            React.createElement('option', {value: 'Failed', style: {color: 'black', backgroundColor: 'white'}}, 'Failed'),
+            React.createElement('option', {value: 'Refunded', style: {color: 'black', backgroundColor: 'white'}}, 'Refunded')
+            );
+          } 
+        },
+        { key: 'date', label: 'Date' }
+      ],
+      hideDefaultActions: true,
+      actions: (row) => React.createElement('div', {style: {display: 'flex', gap: '5px', flexWrap: 'wrap'}},
+        React.createElement('button', {
+            className: 'modern-action-btn btn-danger',
+            onClick: () => {
+              Swal.fire({
+                title: 'Delete Payment?',
+                text: 'Are you sure you want to delete this payment record?',
+                icon: 'warning',
+                showCancelButton: true
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  try {
+                    await api.delete(`/retailer/payments/${row._id}`);
+                    Swal.fire('Deleted!', '', 'success').then(() => window.location.reload());
+                  } catch(e) {
+                    Swal.fire('Error', 'Failed to delete payment.', 'error');
+                  }
+                }
+              });
+            }
+        }, 'Delete')
+      )
+    }, 
+    data: []
+  },
+  { 
+    path: 'retailer-system/shipping', 
+    title: 'Retailer System - Shipping', 
+    subtitle: 'Retailer Shipping',
+    columns: {
+      title: 'RETAILER SHIPPING LIST',
+      headers: [
+        { key: 'id', label: '#' },
+        { key: 'orderNo', label: 'Order No' },
+        { key: 'company', label: 'Company' },
+        { key: 'trackingNo', label: 'Tracking No' },
+        { key: 'date', label: 'Date' },
+        { key: 'status', label: 'Status' }
+      ],
+      hideDefaultActions: true,
+      actions: null
+    }, 
+    data: []
+  },
+
+
+
+  { 
+    path: 'sub-admin-mgmt', 
+    title: 'Sub Admin Management', 
+    subtitle: 'Manage roles and permissions',
+    columns: {
+      title: 'SUB ADMIN LIST',
+      icon: 'users',
+      addButtonText: 'Add New Sub Admin',
+      headers: [
+        { key: 'id', label: 'ID' },
+        { key: 'name', label: 'Name' },
+        { key: 'email', label: 'Email' },
+        { key: 'password', label: 'Password' },
+        { key: 'status', label: 'Status' },
+        { key: 'permissions', label: 'Permissions', type: 'permissions', render: (val) => Array.isArray(val) ? val.join(', ') : val }
+      ]
+    }, 
+    data: [] 
+  },
+  { 
+    path: 'vendor-management/orders', 
+    title: 'Vendor Orders', 
+    subtitle: 'Manage Purchase Orders to Vendors',
+    apiEndpoint: '/vendor-orders',
+    formCardTitle: 'VENDOR ORDER DETAILS',
+    formTitleAdd: 'Add Vendor Order',
+    formTitleEdit: 'Edit Vendor Order',
+    columns: {
+      title: 'VENDOR ORDERS',
+      icon: 'box',
+      addButtonText: 'Create Vendor PO',
+      formSubmitText: 'Save Order',
+      headers: [
+        { key: 'id', label: 'ID' },
+        { key: 'poNumber', label: 'PO Number', formLabel: 'PO Number' },
+        { key: 'vendorId', label: 'Vendor', render: (val) => React.createElement(VendorNameDisplay, { vendorId: val }), type: 'select', options: [], formLabel: 'Vendor (ID)' }, // Note: Would ideally fetch from vendors API
+        { key: 'orderId', label: 'Linked Order', render: (val, row) => row.poNumber ? row.poNumber.replace('PO-', '') : val, type: 'select', options: [], formLabel: 'Linked Order (ID)' }, 
+        { key: 'agreedPriceInr', label: 'Agreed Price (₹)', type: 'number', formLabel: 'Agreed Price (INR)' },
+        { key: 'advancePaidInr', label: 'Advance Paid (₹)', type: 'number', formLabel: 'Advance Paid (INR)' },
+        { key: 'balancePaidInr', label: 'Balance Paid (₹)', type: 'number', formLabel: 'Balance Paid (INR)' },
+        { 
+          key: 'pendingAmount', 
+          label: 'Pending Amount (₹)', 
+          render: (val, row) => {
+            const agreed = parseFloat(row.agreedPriceInr) || 0;
+            let totalPaid = 0;
+            if ((parseFloat(row.advancePaidInr) || 0) + (parseFloat(row.balancePaidInr) || 0) > 0) {
+              totalPaid = (parseFloat(row.advancePaidInr) || 0) + (parseFloat(row.balancePaidInr) || 0);
+            } else if (row.installments && Array.isArray(row.installments)) {
+              totalPaid = row.installments.reduce((sum, inst) => inst.status === 'Paid' ? sum + (parseFloat(inst.amount) || 0) : sum, 0);
+            } else {
+              totalPaid = 0;
+            }
+            return (agreed - totalPaid).toFixed(2);
+          },
+          hideInForm: true 
+        },
+        { key: 'status', label: 'Status', type: 'select', options: ['Pending', 'Production Started', 'Completed', 'Goods Received'], formLabel: 'Status' },
+        { key: 'expectedDeliveryDate', label: 'Expected Delivery Date', type: 'date', formLabel: 'Expected Delivery Date', hideInTable: true },
+        { key: 'incoterm', label: 'Incoterm', type: 'select', options: [{ value: 'FOB', label: 'FOB (Free On Board)' }, { value: 'EXW', label: 'EXW (Ex Works)' }, { value: 'CIF', label: 'CIF (Cost, Insurance, and Freight)' }, { value: 'DDP', label: 'DDP (Delivered Duty Paid)' }, { value: 'DAP', label: 'DAP (Delivered at Place)' }, { value: 'FCA', label: 'FCA (Free Carrier)' }, { value: 'CPT', label: 'CPT (Carriage Paid To)' }, { value: 'CIP', label: 'CIP (Carriage and Insurance Paid To)' }, { value: 'CFR', label: 'CFR (Cost and Freight)' }, { value: 'FAS', label: 'FAS (Free Alongside Ship)' }], hideInTable: true },
+        { key: 'currency', label: 'Currency', formLabel: 'Currency', hideInTable: true },
+        { key: 'paymentTerms', label: 'Payment Terms', type: 'textarea', formLabel: 'Payment Terms', hideInTable: true },
+        { key: 'paymentMethod', label: 'Payment Method', formLabel: 'Payment Method', hideInTable: true },
+        { key: 'deliveryPort', label: 'Delivery Port', formLabel: 'Delivery Port', hideInTable: true },
+        { key: 'packaging', label: 'Packaging', type: 'textarea', formLabel: 'Packaging', hideInTable: true },
+        { key: 'qualityAssurance', label: 'Quality Assurance', type: 'textarea', formLabel: 'Quality Assurance', hideInTable: true },
+        { key: 'leadTime', label: 'Lead Time', type: 'textarea', formLabel: 'Lead Time', hideInTable: true },
+        { key: 'cancellation', label: 'Cancellation Terms', type: 'textarea', formLabel: 'Cancellation Terms', hideInTable: true },
+        { key: 'shippingMode', label: 'Shipping Mode', formLabel: 'Shipping Mode', hideInTable: true },
+        { key: 'preferredCarrier', label: 'Preferred Carrier', formLabel: 'Preferred Carrier', hideInTable: true },
+        { key: 'specialInstructions', label: 'Special Instructions', type: 'textarea', formLabel: 'Special Instructions', hideInTable: true }
+      ],
+      actions: (row, handlers) => React.createElement('div', {style: {display: 'flex', gap: '4px'}},
+        React.createElement('button', {
+            className: 'modern-action-btn',
+            onClick: () => handlers.onEdit(row),
+            title: 'Edit Order',
+            style: { backgroundColor: '#3b82f6', color: 'white' }
+        }, React.createElement(FaEdit)),
+        React.createElement('button', {
+            className: 'modern-action-btn',
+            onClick: () => window.location.href = `/admin/vendor-management/orders/preview/${row._id}`,
+            title: 'Preview PO',
+            style: { backgroundColor: '#8b5cf6', color: 'white' }
+        }, React.createElement(FaFilePdf)),
+        React.createElement('button', {
+            className: 'modern-action-btn',
+            onClick: () => manageVendorInstallments(row, handlers.refresh),
+            title: 'Manage Installments',
+            style: { backgroundColor: '#10b981', color: 'white' }
+        }, React.createElement(FaMoneyBillAlt)),
+        React.createElement('button', {
+            className: 'modern-action-btn',
+            onClick: () => handlers.onDelete(row),
+            title: 'Delete Order',
+            style: { backgroundColor: '#ef4444', color: 'white' }
+        }, React.createElement(FaTrash))
+      )
+    }, 
+    data: [] 
+  },
+  { 
+    path: 'domestic-logistics', 
+    title: 'Domestic Logistics', 
+    subtitle: 'E-Way Bill & Transport to Port',
+    apiEndpoint: '/domestic-logistics',
+    formCardTitle: 'LOGISTICS DETAILS',
+    formTitleAdd: 'Add Logistics Record',
+    formTitleEdit: 'Edit Logistics Record',
+    columns: {
+      title: 'DOMESTIC LOGISTICS',
+      icon: 'truck',
+      addButtonText: 'Create E-Way Bill Record',
+      formSubmitText: 'Save Details',
+      headers: [
+        { key: 'id', label: 'ID' },
+        { key: 'ewayBillNo', label: 'E-Way Bill No.', formLabel: 'E-Way Bill No' },
+        { key: 'orderId', label: 'Linked Order', formLabel: 'Linked Order (ID)' },
+        { key: 'transporterName', label: 'Transporter', formLabel: 'Transporter Name', nested: 'transporterDetails' },
+        { key: 'vehicleNo', label: 'Vehicle No.', formLabel: 'Vehicle Number', nested: 'transporterDetails' },
+        { key: 'lrRrAirwayBill', label: 'LR/RR/Tracking ID', formLabel: 'Tracking ID (LR/RR)', nested: 'transporterDetails' },
+        { key: 'status', label: 'Status', type: 'select', options: ['Pending', 'In Transit', 'Reached Port'], formLabel: 'Status' }
+      ],
+      hideDefaultActions: false,
+      actions: (row, { onEdit, onDelete }) => React.createElement('div', {style: {display: 'flex', gap: '4px'}},
+        React.createElement('button', {
+            className: 'modern-action-btn btn-success',
+            title: 'Preview E-Way Bill',
+            onClick: () => window.location.href = `/admin/domestic-logistics/preview/${row._id}`
+        }, React.createElement(FaFilePdf, null)),
+        row.orderId ? React.createElement('button', {
+            className: 'modern-action-btn btn-warning',
+            style: { backgroundColor: '#3b82f6', color: 'white' },
+            title: 'View Order Details',
+            onClick: () => {
+              const oid = typeof row.orderId === 'object' ? row.orderId._id : row.orderId;
+              window.location.href = `/admin/inquiry-system/orders/details/${oid}`;
+            }
+        }, React.createElement(FaExternalLinkAlt, null)) : null,
+        onEdit && React.createElement('button', {
+            className: 'modern-action-btn btn-primary',
+            onClick: () => onEdit(row)
+        }, React.createElement(FaEdit, null)),
+        onDelete && React.createElement('button', {
+            className: 'modern-action-btn btn-danger',
+            onClick: () => onDelete(row)
+        }, React.createElement(FaTrashAlt, null))
+      )
+    }, 
+    data: [] 
+  },
+  {
+    path: 'membership-plans',
+    title: 'Subscription Plans',
+    singularTitle: 'Subscription Plan',
+    breadcrumbParent: 'Subscription',
+    formTitleAdd: 'Add Subscription Plan',
+    formTitleEdit: 'Edit Subscription Plan',
+    formCardTitle: 'SUBSCRIPTION PLAN DETAILS',
+    columns: {
+      title: 'SUBSCRIPTION PLANS',
+      addButtonText: 'Add New Plan',
+      headers: [
+        { key: 'order', label: 'Order', formLabel: 'Display Order (1, 2, 3...)', type: 'number', placeholder: '1' },
+        { key: 'name', label: 'Plan Name', formLabel: 'Plan Name *', placeholder: 'e.g. HIEIL Essential', minWidth: '160px' },
+        { key: 'duration', label: 'Duration', formLabel: 'Duration *', placeholder: 'e.g. 3 months, 6 months, 12 months' },
+        { key: 'price', label: 'Price', formLabel: 'Price *', placeholder: 'e.g. $1,499' },
+        { key: 'originalPrice', label: 'Original Price', formLabel: 'Original Price (for Strikethrough/Offer)', placeholder: 'e.g. $1,799' },
+        { key: 'perDayCost', label: 'Per Day Cost', formLabel: 'Per Day Cost (e.g. $16.65 / day or leave blank for auto)', placeholder: 'e.g. $16.65 / day' },
+        { key: 'offerBadge', label: 'Offer Badge', formLabel: 'Offer Badge / Discount Tag', placeholder: 'e.g. Save $300 or 20% OFF' },
+        { key: 'isPopular', label: 'Popular?', type: 'select', options: [{ value: true, label: 'Yes (Highlight Card)' }, { value: false, label: 'No' }], formLabel: 'Mark as Popular Plan?' },
+        { key: 'popularTag', label: 'Popular Tag', formLabel: 'Popular Tag Text', placeholder: 'Most Popular' },
+        { key: 'targetAudience', label: 'Target Audience', type: 'textarea', formLabel: 'Target Audience / For Whom', placeholder: 'e.g. For new importers, retailers...' },
+        { key: 'extraHeader', label: 'Extra Header', formLabel: 'Extra Header Subtitle', placeholder: 'e.g. Everything in Essential, plus' },
+        { key: 'features', label: 'Features (1 per line)', type: 'textarea', formLabel: 'Features List (Enter each feature on a new line)', placeholder: 'Feature 1\nFeature 2\nFeature 3' },
+        { key: 'promise', label: 'Promise Quote', formLabel: 'Bottom Promise Quote', placeholder: 'e.g. Start sourcing without building a supplier network from scratch.' },
+        { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive'], formLabel: 'Status' }
+      ]
+    },
+    data: []
+  },
+  {
+    path: 'membership-enquiries',
+    title: 'Subscription Enquiries',
+    singularTitle: 'Subscription Enquiry',
+    breadcrumbParent: 'Subscription',
+    apiEndpoint: '/subscription-enquiries',
+    formTitleAdd: 'Add Subscription Enquiry',
+    formTitleEdit: 'Edit Subscription Enquiry',
+    formCardTitle: 'SUBSCRIPTION ENQUIRY DETAILS',
+    columns: {
+      title: 'SUBSCRIPTION ENQUIRIES',
+      addButtonText: 'Add Enquiry',
+      headers: [
+        { key: 'createdAt', label: 'Date', hideInForm: true, render: (val) => val ? new Date(val).toLocaleDateString() : 'N/A' },
+        { key: 'name', label: 'Client Name', formLabel: 'Client Name *', placeholder: 'Enter Client Name' },
+        { key: 'email', label: 'Email', formLabel: 'Email *', placeholder: 'Enter Email' },
+        { key: 'phone', label: 'Phone', formLabel: 'Phone / WhatsApp', placeholder: 'Enter Phone' },
+        { key: 'companyName', label: 'Company', formLabel: 'Company / Brand Name', placeholder: 'Enter Company' },
+        { 
+          key: 'planName', 
+          label: 'Plan', 
+          formLabel: 'Plan Selected', 
+          placeholder: 'e.g. HIEIL Business',
+          render: (val, row) => {
+            const planIdVal = row.planId ? (typeof row.planId === 'object' ? row.planId._id : row.planId) : null;
+            const planNameVal = val || (row.planId && typeof row.planId === 'object' ? row.planId.name : '');
+            const hasPlan = Boolean(planIdVal) || (Boolean(planNameVal) && planNameVal.trim() !== '' && planNameVal !== 'No Plan' && planNameVal !== 'General Consultation');
+
+            if (!hasPlan) {
+              return React.createElement('span', {
+                style: {
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  color: '#dc2626',
+                  backgroundColor: '#fee2e2',
+                  border: '1px solid #fecaca'
+                }
+              }, 'No Product');
+            }
+
+            return React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '4px' } },
+              React.createElement('div', { style: { fontWeight: '600', color: '#111827', fontSize: '13px' } }, planNameVal || 'Subscription Plan'),
+              React.createElement('button', {
+                type: 'button',
+                style: {
+                  padding: '3px 8px',
+                  fontSize: '11px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  backgroundColor: '#fdf4ec',
+                  color: '#c8956c',
+                  border: '1px solid #e8cdb5',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  width: 'fit-content'
+                },
+                onClick: () => window.open('/subscription#plans', '_blank')
+              }, React.createElement(FaExternalLinkAlt, { style: { fontSize: '10px' } }), 'View Plan')
+            );
+          }
+        },
+        { key: 'duration', label: 'Duration', formLabel: 'Duration', placeholder: 'e.g. 6 months' },
+        { key: 'price', label: 'Price', formLabel: 'Price', placeholder: 'e.g. $2,499' },
+        { key: 'targetMarket', label: 'Market', formLabel: 'Target Market', placeholder: 'e.g. USA, Europe' },
+        { key: 'expectedOrderSize', label: 'Order Size', formLabel: 'Expected Order Size' },
+        { key: 'message', label: 'Requirements / Message', type: 'textarea', formLabel: 'Message / Sourcing Requirements' },
+        { 
+          key: 'status', 
+          label: 'Status', 
+          type: 'select', 
+          options: ['Pending', 'Contacted', 'Active', 'Rejected', 'Expired'], 
+          formLabel: 'Status',
+          render: (val) => {
+            const color = val === 'Active' ? '#22c55e' : (val === 'Contacted' ? '#3b82f6' : (val === 'Pending' ? '#eab308' : '#ef4444'));
+            return React.createElement('span', { style: { backgroundColor: color, color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' } }, val || 'Pending');
+          }
+        },
+        { key: 'startDate', label: 'Start Date', type: 'date', formLabel: 'Subscription Start Date' },
+        { key: 'endDate', label: 'End Date', type: 'date', formLabel: 'Subscription Expiry Date' },
+        { key: 'notes', label: 'Admin Notes', type: 'textarea', formLabel: 'Internal Notes / Note to Client' }
+      ]
+    },
+    data: []
+  },
+  {
+    path: 'inquiry-system/catalogue-requests',
+    title: 'Catalogue & Quote Requests',
+    singularTitle: 'Catalogue Request',
+    breadcrumbParent: 'Inquiry System',
+    apiEndpoint: '/catalogue-requests',
+    formTitleAdd: 'Add Catalogue Request',
+    formTitleEdit: 'Edit Catalogue Request',
+    formCardTitle: 'CATALOGUE REQUEST DETAILS',
+    columns: {
+      title: 'CATALOGUE & QUOTE REQUESTS',
+      hideDefaultActions: false,
+      headers: [
+        { 
+          key: 'createdAt', 
+          label: 'Date', 
+          hideInForm: true, 
+          render: (val) => val ? new Date(val).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A' 
+        },
+        { key: 'name', label: 'Client Name', formLabel: 'Client Name *', placeholder: 'Enter Client Name' },
+        { 
+          key: 'email', 
+          label: 'Email', 
+          formLabel: 'Email *', 
+          placeholder: 'Enter Email',
+          render: (val) => React.createElement('a', { href: `mailto:${val}`, style: { color: '#2563eb', fontWeight: '500', textDecoration: 'none' } }, val)
+        },
+        { key: 'phone', label: 'Phone', formLabel: 'Phone / WhatsApp', placeholder: 'Enter Phone' },
+        {
+          key: 'catalogues',
+          label: 'Requested Catalogues',
+          formLabel: 'Catalogues',
+          render: (val) => {
             const list = Array.isArray(val) ? val : [];
             if (list.length === 0) return React.createElement('span', { style: { color: '#94a3b8', fontStyle: 'italic', fontSize: '12px' } }, 'None selected');
             
@@ -1462,17 +2653,16 @@ export const pageConfigs = [
               'wood': { bg: '#ffedd5', color: '#c2410c', border: '#fed7aa' }
             };
 
-            const fileMap = {
-              'blue-pottery': 'HIEIL_Blue_Pottery_Catalogue.pdf',
-              'clocks': 'HIEIL_Handcrafted_Clock_Catalogue.pdf',
-              'metal': 'HIEIL_Handcrafted_Metal_Catalogue.pdf',
-              'stone': 'HIEIL_Handcrafted_Stone_Catalogue.pdf',
-              'wood': 'HIEIL_Handcrafted_Wood_Catalogue.pdf'
-            };
-
-            return React.createElement('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '6px', maxWidth: '340px' } },
+            return React.createElement('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '4px', maxWidth: '320px' } },
               list.map((c, i) => {
                 const s = badgeStyles[c.id] || { bg: '#f3f4f6', color: '#374151', border: '#e5e7eb' };
+                const fileMap = {
+                  'blue-pottery': 'HIEIL_Blue_Pottery_Catalogue.pdf',
+                  'clocks': 'HIEIL_Handcrafted_Clock_Catalogue.pdf',
+                  'metal': 'HIEIL_Handcrafted_Metal_Catalogue.pdf',
+                  'stone': 'HIEIL_Handcrafted_Stone_Catalogue.pdf',
+                  'wood': 'HIEIL_Handcrafted_Wood_Catalogue.pdf'
+                };
                 const fileName = c.file || fileMap[c.id] || (c.title && c.title.toLowerCase().includes('stone') ? 'HIEIL_Handcrafted_Stone_Catalogue.pdf' : (c.title && c.title.toLowerCase().includes('wood') ? 'HIEIL_Handcrafted_Wood_Catalogue.pdf' : (c.title && c.title.toLowerCase().includes('metal') ? 'HIEIL_Handcrafted_Metal_Catalogue.pdf' : (c.title && c.title.toLowerCase().includes('clock') ? 'HIEIL_Handcrafted_Clock_Catalogue.pdf' : 'HIEIL_Blue_Pottery_Catalogue.pdf'))));
                 const targetUrl = fileName.startsWith('http') ? fileName : ('/' + fileName);
 
@@ -1495,21 +2685,12 @@ export const pageConfigs = [
                     border: '1px solid ' + s.border,
                     textDecoration: 'none',
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.06)'
-                  },
-                  onMouseEnter: (e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 3px 6px rgba(0,0,0,0.12)';
-                  },
-                  onMouseLeave: (e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.06)';
                   }
                 }, 
                   React.createElement(FaFilePdf, { style: { fontSize: '11px' } }), 
                   c.badge || c.title,
-                  React.createElement(FaExternalLinkAlt, { style: { fontSize: '9px', opacity: 0.65, marginLeft: '2px' } })
+                  React.createElement(FaExternalLinkAlt, { style: { fontSize: '9px', opacity: 0.7, marginLeft: '2px' } })
                 );
               })
             );
