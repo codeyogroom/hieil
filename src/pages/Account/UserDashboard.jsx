@@ -31,6 +31,12 @@ const UserDashboard = () => {
       } else if (activeTab === 'orders') {
         const res = await api.get('/users/auth/orders', { headers: { Authorization: 'Bearer ' + token } });
         setOrders(res.data || []);
+      } else if (activeTab === 'membership') {
+        const res = await api.get('/users/auth/memberships', { headers: { Authorization: 'Bearer ' + token } });
+        setMemberships(res.data || []);
+      } else if (activeTab === 'catalogues') {
+        const res = await api.get('/users/auth/catalogues', { headers: { Authorization: 'Bearer ' + token } });
+        setCatalogueRequests(res.data || []);
       }
     } catch (err) {
       console.error(err);
@@ -68,6 +74,7 @@ const UserDashboard = () => {
 
   const tabs = [
     { id: 'profile', label: 'My Profile', icon: <User size={18} /> },
+    { id: 'catalogues', label: 'My Catalogues', icon: <BookOpen size={18} /> },
     { id: 'inquiries', label: 'My Inquiries', icon: <FileText size={18} /> },
     { id: 'quotations', label: 'My Quotations', icon: <FileText size={18} /> },
     { id: 'wishlist', label: 'Wishlist', icon: <Heart size={18} /> },
@@ -129,6 +136,197 @@ const UserDashboard = () => {
               </div>
             </div>
           )}
+
+          {/* CATALOGUES TAB */}
+          {activeTab === 'catalogues' && (
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h3 className="text-2xl font-serif text-[#c8956c]">My Product Catalogues</h3>
+                  <p className="text-[#b5aaa0] text-sm mt-1">
+                    Official HIEIL wholesale handicraft catalogues with verified product specifications.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-catalogue-modal'))}
+                  className="self-start sm:self-auto bg-[#c8956c] text-[#110e0c] font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded hover:bg-[#e2c994] transition-all flex items-center gap-2 cursor-pointer shadow-md"
+                >
+                  <BookOpen size={15} /> Request Catalogues
+                </button>
+              </div>
+
+              {dataLoading ? (
+                <div className="flex justify-center py-12">
+                  <div className="w-8 h-8 border-4 border-[#c8956c] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              ) : catalogueRequests.length === 0 ? (
+                <div className="bg-[#15110F] border border-[#2c241c] p-8 sm:p-12 rounded-xl text-center">
+                  <BookOpen size={42} className="mx-auto text-[#c8956c] mb-3 opacity-60" />
+                  <h4 className="text-white text-lg font-medium mb-1">No Catalogues Requested Yet</h4>
+                  <p className="text-[#b5aaa0] text-sm max-w-md mx-auto mb-6">
+                    Request official PDF catalogues for Blue Pottery, Luxury Clocks, Metal Art, Stone Decor, and Woodcraft. Once approved by admin, download links will unlock here.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-catalogue-modal'))}
+                    className="inline-flex items-center gap-2 bg-[#c8956c] text-[#110e0c] font-bold text-xs uppercase tracking-wider py-3 px-6 rounded hover:bg-[#e2c994] transition-all cursor-pointer"
+                  >
+                    <BookOpen size={16} /> Request Product Catalogues
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-6">
+                  {catalogueRequests.map((reqItem) => {
+                    const isApproved = reqItem.status === 'Approved';
+                    const isPending = reqItem.status === 'Pending';
+                    const isRejected = reqItem.status === 'Rejected';
+
+                    return (
+                      <div
+                        key={reqItem._id}
+                        className={'bg-[#15110F] border rounded-xl p-5 sm:p-6 transition-colors ' + (isApproved ? 'border-[#c8956c]/50 shadow-[0_4px_20px_rgba(200,149,108,0.08)]' : 'border-[#2c241c]')}
+                      >
+                        {/* Request Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2c241c]">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-serif text-lg text-white font-medium">
+                                Catalogue Access Request
+                              </span>
+                              <span className="text-xs text-[#b5aaa0]">
+                                &middot; {reqItem.catalogues?.length || 0} Topics
+                              </span>
+                            </div>
+                            <div className="text-xs text-[#b5aaa0]">
+                              Requested on {new Date(reqItem.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              {reqItem.approvedAt && isApproved && (
+                                <span className="text-[#c8956c] ml-2">
+                                  &middot; Approved on {new Date(reqItem.approvedAt).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={'text-xs px-3 py-1 rounded-full uppercase font-bold tracking-wider inline-flex items-center gap-1.5 ' + (
+                                isApproved
+                                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                  : isPending
+                                  ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                                  : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                              )}
+                            >
+                              {isApproved ? (
+                                <>
+                                  <Unlock size={13} /> Approved & Unlocked
+                                </>
+                              ) : isPending ? (
+                                <>
+                                  <Lock size={13} /> Pending Admin Approval
+                                </>
+                              ) : (
+                                'Declined'
+                              )}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Status Notice Banner */}
+                        <div className="my-4">
+                          {isApproved ? (
+                            <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-lg flex items-start gap-2.5">
+                              <ShieldCheck size={18} className="text-green-400 shrink-0 mt-0.5" />
+                              <p className="text-xs text-green-200/90 leading-relaxed m-0">
+                                <strong>Access Granted:</strong> Your catalogue request has been approved by the HIEIL administration. You can view or download each PDF catalogue below.
+                              </p>
+                            </div>
+                          ) : isPending ? (
+                            <div className="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-lg flex items-start gap-2.5">
+                              <Lock size={18} className="text-yellow-400 shrink-0 mt-0.5" />
+                              <p className="text-xs text-yellow-200/90 leading-relaxed m-0">
+                                <strong>Verification Pending:</strong> To safeguard manufacturer pricing, direct catalogue access is currently locked. Our export team is reviewing your request and will unlock the files shortly.
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-lg flex items-start gap-2.5">
+                              <AlertCircle size={18} className="text-red-400 shrink-0 mt-0.5" />
+                              <p className="text-xs text-red-200/90 leading-relaxed m-0">
+                                This catalogue request could not be approved. Please contact our support team on WhatsApp if you require assistance.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Catalogues Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                          {(reqItem.catalogues || []).map((cat, idx) => (
+                            <div
+                              key={idx}
+                              className="bg-[#110e0c] border border-[#2c241c] p-4 rounded-lg flex flex-col justify-between gap-3"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded bg-[#c8956c]/10 border border-[#c8956c]/30 flex items-center justify-center shrink-0 text-[#c8956c]">
+                                  <FileText size={20} />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h5 className="text-white text-sm font-medium leading-tight">
+                                      {cat.title}
+                                    </h5>
+                                    <span className="text-[10px] bg-[#2c241c] text-[#a39a8c] px-1.5 py-0.5 rounded font-mono uppercase">
+                                      PDF
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-[#888] font-mono mt-1 truncate">
+                                    {cat.file}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Actions or Locked Status */}
+                              <div className="pt-2 border-t border-[#2c241c]/60 flex items-center justify-between gap-2">
+                                {isApproved ? (
+                                  <>
+                                    <a
+                                      href={'/' + cat.file}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex-1 text-center py-2 px-3 text-xs font-semibold rounded bg-[#2c241c] text-[#c8956c] hover:bg-[#c8956c] hover:text-[#110e0c] transition-all flex items-center justify-center gap-1.5"
+                                    >
+                                      <Eye size={14} /> View PDF
+                                    </a>
+                                    <a
+                                      href={'/' + cat.file}
+                                      download={cat.file}
+                                      className="flex-1 text-center py-2 px-3 text-xs font-semibold rounded bg-[#c8956c] text-[#110e0c] hover:bg-[#e2c994] transition-all flex items-center justify-center gap-1.5"
+                                    >
+                                      <Download size={14} /> Download
+                                    </a>
+                                  </>
+                                ) : isPending ? (
+                                  <div className="w-full py-2 px-3 text-xs font-medium rounded bg-[#1a1715] text-[#888] border border-[#2c241c] flex items-center justify-center gap-2 cursor-not-allowed">
+                                    <Lock size={13} className="text-yellow-500/70" />
+                                    <span>Locked &mdash; Awaiting Approval</span>
+                                  </div>
+                                ) : (
+                                  <div className="w-full py-2 px-3 text-xs font-medium rounded bg-[#1a1715] text-red-400 border border-red-500/20 flex items-center justify-center gap-2">
+                                    <span>Access Declined</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           
                       {/* INQUIRIES TAB */}
             {activeTab === 'inquiries' && (
