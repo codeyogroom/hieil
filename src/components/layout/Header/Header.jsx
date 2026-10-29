@@ -477,47 +477,22 @@ const Header = () => {
             </div>
 
             <form onSubmit={handleQuoteSubmit} className="flex flex-col gap-5">
-              {/* Client Info Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div className="sm:col-span-2">
-                  <label className="block text-xs uppercase tracking-wider text-[#c8956c] font-semibold mb-1.5">
-                    Email Address <span className="text-red-400">*</span>
-                  </label>
-                  <input 
-                    type="email" 
-                    value={quoteEmail}
-                    onChange={(e) => setQuoteEmail(e.target.value)}
-                    placeholder="name@company.com" 
-                    required
-                    className="w-full bg-[#15110F] border border-[#2c241c] p-3 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#a39a8c] font-medium mb-1.5">
-                    Your Name
-                  </label>
-                  <input 
-                    type="text" 
-                    value={quoteName}
-                    onChange={(e) => setQuoteName(e.target.value)}
-                    placeholder="Full Name" 
-                    className="w-full bg-[#15110F] border border-[#2c241c] p-3 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-[#a39a8c] font-medium mb-1.5">
-                    Phone / WhatsApp
-                  </label>
-                  <input 
-                    type="tel" 
-                    value={quotePhone}
-                    onChange={(e) => setQuotePhone(e.target.value)}
-                    placeholder="+91 / Country Code & Number" 
-                    className="w-full bg-[#15110F] border border-[#2c241c] p-3 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
-                  />
-                </div>
+              {/* Client Email Field */}
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-[#c8956c] font-semibold mb-1.5">
+                  Email Address <span className="text-red-400">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  value={quoteEmail}
+                  onChange={(e) => setQuoteEmail(e.target.value)}
+                  placeholder="name@company.com" 
+                  required
+                  className="w-full bg-[#15110F] border border-[#2c241c] p-3.5 text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#c8956c] transition-colors rounded-sm"
+                />
+                <p className="text-[12px] text-[#888] mt-1.5">
+                  Your official PDF catalogues will be unlocked and linked to this email address.
+                </p>
               </div>
 
               {/* Catalogue Selection Section */}
