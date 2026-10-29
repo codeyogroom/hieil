@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Mail } from 'lucide-react';
+import { Search, Mail, X, Calendar, User, ArrowRight } from 'lucide-react';
 import LazyImage from '../../components/common/LazyMedia/LazyImage';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -10,6 +10,7 @@ const Blog = () => {
   const [categories, setCategories] = useState([]);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState(null);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -125,15 +126,33 @@ const Blog = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-aos="fade-up" data-aos-delay="200">
-              {blogs.filter(b => activeTab === 'All Posts' || b.category === activeTab).map(blog => (
-                <div key={blog._id} className="bg-[rgba(28,23,19,0.6)] backdrop-blur-[10px] border border-[#2c241c] rounded-[20px] overflow-hidden transition-all duration-400 hover:border-[#4a3e35] hover:-translate-y-[5px]">
-                  <div className="h-[240px] overflow-hidden">
-                    <LazyImage src={blog.image || '/blog1.png'} alt={blog.title} className="w-full h-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-400 group-hover:[&>img]:scale-105" />
+              {blogs.filter(b => activeTab === 'All Posts' || (b.category && b.category.trim().toLowerCase() === activeTab.trim().toLowerCase())).map(blog => (
+                <div 
+                  key={blog._id} 
+                  onClick={() => setSelectedBlog(blog)}
+                  className="group bg-[rgba(28,23,19,0.6)] backdrop-blur-[10px] border border-[#2c241c] rounded-[20px] overflow-hidden transition-all duration-400 hover:border-[#c8956c] hover:-translate-y-[5px] cursor-pointer flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="h-[240px] overflow-hidden">
+                      <LazyImage src={blog.image || '/blog1.png'} alt={blog.title} className="w-full h-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-400 group-hover:[&>img]:scale-105" />
+                    </div>
+                    <div className="p-[25px]">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <span className="text-[#c8956c] font-sans text-[0.7rem] tracking-[2px] uppercase block">{blog.tag || blog.category}</span>
+                        {blog.createdAt && (
+                          <span className="text-gray-400 text-[0.75rem]">
+                            {new Date(blog.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-serif text-[1.3rem] text-white mb-[15px] group-hover:text-[#c8956c] transition-colors">{blog.title}</h4>
+                      <p className="text-[#b5aaa0] text-[0.95rem] leading-[1.6] line-clamp-3">{blog.description}</p>
+                    </div>
                   </div>
-                  <div className="p-[25px]">
-                    <span className="text-[#c8956c] font-sans text-[0.7rem] tracking-[2px] uppercase mb-2 block">{blog.tag || blog.category}</span>
-                    <h4 className="font-serif text-[1.3rem] text-white mb-[15px]">{blog.title}</h4>
-                    <p className="text-[#b5aaa0] text-[0.95rem] leading-[1.6]">{blog.description}</p>
+                  <div className="px-[25px] pb-[25px] pt-0">
+                    <span className="text-[#c8956c] text-[0.85rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      Read Full Article <ArrowRight size={15} />
+                    </span>
                   </div>
                 </div>
               ))}
@@ -208,6 +227,77 @@ const Blog = () => {
           </div>
         </div>
       </section>
+      {/* Article Reader Modal */}
+      {selectedBlog && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md animate-fadeIn"
+          onClick={() => setSelectedBlog(null)}
+        >
+          <div 
+            className="bg-[#1C1713] border border-[#3e3228] w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-y-auto shadow-2xl relative flex flex-col text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Bar */}
+            <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#1C1713]/95 backdrop-blur border-b border-[#2c241c]">
+              <div className="flex items-center gap-3">
+                <span className="bg-[#c8956c]/20 text-[#c8956c] border border-[#c8956c]/40 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-medium">
+                  {selectedBlog.category || 'Article'}
+                </span>
+                {selectedBlog.createdAt && (
+                  <span className="text-xs text-gray-400 flex items-center gap-1">
+                    <Calendar size={13} /> {new Date(selectedBlog.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </span>
+                )}
+              </div>
+              <button 
+                onClick={() => setSelectedBlog(null)}
+                className="w-9 h-9 rounded-full bg-[#2c241c] hover:bg-[#3e3228] text-gray-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 md:p-10 space-y-6">
+              <h1 className="font-serif text-2xl md:text-4xl text-white leading-tight">
+                {selectedBlog.title}
+              </h1>
+
+              {selectedBlog.image && (
+                <div className="w-full max-h-[420px] rounded-xl overflow-hidden border border-[#2c241c]">
+                  <img src={selectedBlog.image} alt={selectedBlog.title} className="w-full h-full object-cover" />
+                </div>
+              )}
+
+              {selectedBlog.description && (
+                <div className="p-4 rounded-xl bg-[rgba(200,149,108,0.08)] border-l-4 border-[#c8956c] text-[#e2d9d0] italic text-base leading-relaxed">
+                  {selectedBlog.description}
+                </div>
+              )}
+
+              {selectedBlog.content ? (
+                <div 
+                  className="prose prose-invert max-w-none text-[#cfc5bb] leading-relaxed space-y-4 [&>p]:leading-relaxed [&>h2]:text-white [&>h2]:text-2xl [&>h2]:font-serif [&>h2]:mt-6 [&>h3]:text-[#c8956c] [&>h3]:text-xl [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:list-decimal [&>ol]:pl-6 [&>img]:rounded-lg [&>img]:my-4"
+                  dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
+                />
+              ) : (
+                <p className="text-gray-400">Full article content not available.</p>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 bg-[#161210] border-t border-[#2c241c] flex items-center justify-between">
+              <span className="text-xs text-gray-400">Hind Import Export International (HIEIL)</span>
+              <button 
+                onClick={() => setSelectedBlog(null)}
+                className="px-6 py-2 rounded-lg bg-[#c8956c] hover:bg-[#b07d56] text-[#15110F] font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Close Article
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

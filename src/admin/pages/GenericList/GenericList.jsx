@@ -18,6 +18,7 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
   const [hasDynamicCategories, setHasDynamicCategories] = useState(false);
   const [dynamicVendors, setDynamicVendors] = useState([]);
   const [dynamicOrders, setDynamicOrders] = useState([]);
+  const editorRef = React.useRef(null);
 
   useEffect(() => {
     const fetchDynamicCategories = async () => {
@@ -255,23 +256,31 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
+      let dataToSave = { ...formData };
+      if (editorRef.current && editorRef.current.value !== undefined) {
+        const richCol = columns.headers.find(c => c.type === 'rich-text');
+        if (richCol) {
+          dataToSave[richCol.key] = editorRef.current.value;
+        }
+      }
+
       if (apiEndpoint) {
         if (editingId) {
-          await api.put(`${apiEndpoint}/${editingId}`, formData);
+          await api.put(`${apiEndpoint}/${editingId}`, dataToSave);
           Swal.fire('Updated!', 'The item has been updated.', 'success');
         } else {
-          await api.post(apiEndpoint, formData);
+          await api.post(apiEndpoint, dataToSave);
           Swal.fire('Added!', 'The item has been added.', 'success');
         }
         fetchData();
       } else {
         if (editingId) {
-          setTableData(tableData.map(item => item.id === editingId ? { ...item, ...formData } : item));
+          setTableData(tableData.map(item => item.id === editingId ? { ...item, ...dataToSave } : item));
           Swal.fire('Updated!', 'The item has been updated.', 'success');
         } else {
           const newId = tableData.length > 0 ? Math.max(...tableData.map(d => parseInt(d.id) || 0)) + 1 : 1;
           const newItem = {
-            ...formData,
+            ...dataToSave,
             id: newId,
             createdAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
             status: 'ACTIVE'
@@ -283,7 +292,8 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error saving:', error);
-      Swal.fire('Error', 'Failed to save the item', 'error');
+      const msg = error.response?.data?.message || 'Failed to save the item';
+      Swal.fire('Error', msg, 'error');
     }
   };
 
@@ -369,7 +379,14 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
                         return dynamicOrders.map(o => ({ value: o._id, label: o.orderNo }));
                       }
                       if ((col.key === 'category' || col.key === 'categoryName') && hasDynamicCategories) {
-                        return dynamicCategories;
+                        const merged = [...dynamicCategories];
+                        if (merged.length === 0 && Array.isArray(col.options)) {
+                          merged.push(...col.options);
+                        }
+                        if (formData[col.key] && !merged.includes(formData[col.key])) {
+                          merged.unshift(formData[col.key]);
+                        }
+                        return merged;
                       }
                       if (col.key === 'subCategory' && dynamicSubcategories.length > 0) {
                           if (!formData.category) return []; // Don't show any until category is selected
@@ -453,13 +470,17 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
                 ) : col.type === 'rich-text' ? (
                   <div style={{ border: '1px solid #e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
                     <JoditEditor
+                      ref={editorRef}
                       value={formData[col.key] !== undefined && formData[col.key] !== null ? formData[col.key] : ''}
                       config={{
                         readonly: false,
                         placeholder: col.placeholder || `Enter ${(col.formLabel || col.label).toLowerCase()}`,
-                        minHeight: 500,
+                        minHeight: 450,
                         askBeforePasteHTML: false,
-                        defaultActionOnPaste: 'insert_as_html'
+                        defaultActionOnPaste: 'insert_as_html',
+                        uploader: {
+                          insertImageAsBase64URI: true
+                        }
                       }}
                       onBlur={(newContent) => handleInputChange({ target: { value: newContent } }, col.key)}
                       onChange={() => {}}

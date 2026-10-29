@@ -416,28 +416,40 @@ export const pageConfigs = [
     breadcrumbParent: 'Blogs',
     formTitleAdd: 'Add New Blog',
     formTitleEdit: 'Edit Blog',
-    formSubtitle: 'Create a new Blog',
-    formCardTitle: '+ Add Blog',
+    formSubtitle: 'Manage articles, stories and updates',
+    formCardTitle: '+ Blog Details',
     columns: {
-      title: 'Blog List',
+      title: 'Blog Repository',
       icon: 'list',
       addButtonText: 'Add New Blog',
-      formSubmitText: 'Add Blog',
+      formSubmitText: 'Save Blog',
       formSubmitIcon: 'FaSave',
       headers: [
-        { key: 'id', label: 'ID' },
+        { 
+          key: 'id', 
+          label: '#', 
+          hideInForm: true,
+          render: (val, row, { index }) => `#${row.id ? String(row.id).slice(-6).toUpperCase() : (index !== undefined ? index + 1 : 1)}`
+        },
+        { key: 'image', label: 'Cover Image', type: 'file', formLabel: 'Upload Cover Image' },
+        { key: 'title', label: 'Title', formLabel: 'Blog Title', placeholder: 'Enter blog title', required: true },
         { 
           key: 'category', 
           label: 'Category',
           type: 'select',
           formLabel: 'Blog Category',
-          options: ['Handicraft', 'Woodwork', 'Art', 'Design']
+          options: ['Handicraft', 'Woodwork', 'Art', 'Design', 'HOW TO ?'],
+          required: true
         },
-        { key: 'title', label: 'Title', formLabel: 'Blog Title', placeholder: 'Enter blog title' },
-        { key: 'tag', label: 'Tag', formLabel: 'Tag', placeholder: 'Enter tags' },
-        { key: 'description', label: 'Description', formLabel: 'Short Description', placeholder: 'Enter short description', hideInTable: true },
-        { key: 'image', label: 'Image', type: 'file', formLabel: 'Upload Image' },
-        { key: 'content', label: 'Content', type: 'rich-text', formLabel: 'Content', placeholder: 'Enter content here...', hideInTable: true }
+        { key: 'tag', label: 'Tag', formLabel: 'Tag / Keywords', placeholder: 'e.g. Handmade, Woodcraft, Home Decor' },
+        { key: 'description', label: 'Description', type: 'textarea', formLabel: 'Short Summary / Excerpt', placeholder: 'Enter short description', hideInTable: true },
+        { key: 'content', label: 'Content', type: 'rich-text', formLabel: 'Full Article Content', placeholder: 'Enter content here...', hideInTable: true },
+        { 
+          key: 'createdAt', 
+          label: 'Date', 
+          hideInForm: true, 
+          render: (val) => val ? new Date(val).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A' 
+        }
       ]
     },
     data: []
