@@ -13,6 +13,7 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
   const [formData, setFormData] = useState({});
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [dynamicCategories, setDynamicCategories] = useState([]);
   const [dynamicSubcategories, setDynamicSubcategories] = useState([]);
   const [hasDynamicCategories, setHasDynamicCategories] = useState(false);
@@ -255,22 +256,59 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    if (saving) return;
+    setSaving(true);
     try {
       let dataToSave = { ...formData };
-      if (editorRef.current && editorRef.current.value !== undefined) {
-        const richCol = columns.headers.find(c => c.type === 'rich-text');
-        if (richCol) {
-          dataToSave[richCol.key] = editorRef.current.value;
+      
+      // Safely extract rich-text content if present
+      const richCol = columns.headers.find(c => c.type === 'rich-text');
+      if (richCol) {
+        let contentVal = formData[richCol.key];
+        if (editorRef.current) {
+          try {
+            if (typeof editorRef.current.getEditorValue === 'function') {
+              const v = editorRef.current.getEditorValue();
+              if (v !== undefined && v !== null) contentVal = v;
+            } else if (typeof editorRef.current.value === 'string') {
+              contentVal = editorRef.current.value;
+            } else if (editorRef.current.value !== undefined && editorRef.current.value !== null) {
+              contentVal = String(editorRef.current.value);
+            }
+          } catch (err) {
+            console.warn('Could not read editorRef value:', err);
+          }
         }
+        dataToSave[richCol.key] = contentVal !== undefined ? contentVal : '';
       }
+
+      // Sanitize fields before sending to API
+      const cleanData = { ...dataToSave };
+      delete cleanData._id;
+      delete cleanData.id;
+      delete cleanData.__v;
+      delete cleanData.createdAt;
+      delete cleanData.updatedAt;
 
       if (apiEndpoint) {
         if (editingId) {
-          await api.put(`${apiEndpoint}/${editingId}`, dataToSave);
-          Swal.fire('Updated!', 'The item has been updated.', 'success');
+          await api.put(`${apiEndpoint}/${editingId}`, cleanData);
+          Swal.fire({
+            title: 'Updated!',
+            text: 'The item has been updated successfully.',
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
+          });
         } else {
-          await api.post(apiEndpoint, dataToSave);
-          Swal.fire('Added!', 'The item has been added.', 'success');
+          await api.post(apiEndpoint, cleanData);
+          Swal.fire({
+            title: 'Added!',
+            text: 'The item has been added successfully.',
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
+          });
         }
         fetchData();
       } else {
@@ -292,8 +330,14 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error saving:', error);
-      const msg = error.response?.data?.message || 'Failed to save the item';
+      const msg = error.response?.data?.message 
+        || error.response?.data?.error 
+        || (typeof error.response?.data === 'string' && error.response.data.length < 300 ? error.response.data : null)
+        || error.message 
+        || 'Failed to save the item';
       Swal.fire('Error', msg, 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -508,12 +552,31 @@ const GenericList = ({ title, subtitle, columns, data, config = {} }) => {
             ))}
             </div>
             <div className="form-actions" style={{display: 'flex', justifyContent: 'flex-end', gap: '15px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #e2e8f0'}}>
-              <button type="button" onClick={() => setIsModalOpen(false)} style={{padding: '10px 20px', background: 'white', color: '#000', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer', fontWeight: '500'}}>
+              <button 
+                type="button" 
+                onClick={() => setIsModalOpen(false)} 
+                disabled={saving}
+                style={{padding: '10px 20px', background: 'white', color: '#000', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: saving ? 'not-allowed' : 'pointer', fontWeight: '500', opacity: saving ? 0.6 : 1}}
+              >
                 Cancel
               </button>
-              <button type="submit" className="submit-btn" style={{padding: '10px 20px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', fontWeight: '500'}}>
-                {columns.formSubmitIcon && FaIcons[columns.formSubmitIcon] ? React.createElement(FaIcons[columns.formSubmitIcon], null) : (isEditing ? '' : '+ ')}
-                {isEditing ? 'Save Changes' : (columns.formSubmitText || columns.addButtonText || 'Add')}
+              <button 
+                type="submit" 
+                className="submit-btn" 
+                disabled={saving}
+                style={{padding: '10px 20px', backgroundColor: saving ? '#94a3b8' : '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: saving ? 'not-allowed' : 'pointer', fontWeight: '500'}}
+              >
+                {saving ? (
+                  <>
+                    <span style={{display: 'inline-block', width: '14px', height: '14px', border: '2px solid white', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite'}}></span>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    {columns.formSubmitIcon && FaIcons[columns.formSubmitIcon] ? React.createElement(FaIcons[columns.formSubmitIcon], null) : (isEditing ? '' : '+ ')}
+                    {isEditing ? 'Save Changes' : (columns.formSubmitText || columns.addButtonText || 'Add')}
+                  </>
+                )}
               </button>
             </div>
           </form>
