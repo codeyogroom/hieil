@@ -4,6 +4,26 @@ import LazyImage from '../../components/common/LazyMedia/LazyImage';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+const formatBlogContent = (html) => {
+  if (!html) return '';
+  return html
+    // Strip all inline color properties (e.g. color:#000000 from Google Docs/Word)
+    .replace(/color\s*:\s*[^;"]+;?/gi, '')
+    // Strip inline background-color properties
+    .replace(/background-color\s*:\s*[^;"]+;?/gi, '')
+    // Strip inline font-family (Calibri, Arial, etc.) so site font is used
+    .replace(/font-family\s*:\s*[^;"]+;?/gi, '')
+    // Strip white-space: pre / pre-wrap that causes overflow
+    .replace(/white-space\s*:\s*pre[^;"]*;?/gi, '')
+    // Strip inline line-height
+    .replace(/line-height\s*:\s*[^;"]+;?/gi, '')
+    // Clean up empty style attributes
+    .replace(/style="\s*"/gi, '')
+    // Remove Apple / Google Docs junk tags
+    .replace(/<br class="Apple-interchange-newline">/gi, '')
+    .replace(/id="docs-internal-guid-[^"]*"/gi, '');
+};
+
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [artisans, setArtisans] = useState([]);
@@ -244,8 +264,8 @@ const Blog = () => {
                   {selectedBlog.category || 'Article'}
                 </span>
                 {selectedBlog.createdAt && (
-                  <span className="text-xs text-gray-400 flex items-center gap-1">
-                    <Calendar size={13} /> {new Date(selectedBlog.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  <span className="text-xs text-[#b5aaa0] flex items-center gap-1.5">
+                    <Calendar size={13} className="text-[#c8956c]" /> {new Date(selectedBlog.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
                 )}
               </div>
@@ -270,15 +290,15 @@ const Blog = () => {
               )}
 
               {selectedBlog.description && (
-                <div className="p-4 rounded-xl bg-[rgba(200,149,108,0.08)] border-l-4 border-[#c8956c] text-[#e2d9d0] italic text-base leading-relaxed">
+                <div className="p-4 rounded-xl bg-[rgba(200,149,108,0.08)] border-l-4 border-[#c8956c] text-[#f3ede6] italic text-base leading-relaxed">
                   {selectedBlog.description}
                 </div>
               )}
 
               {selectedBlog.content ? (
                 <div 
-                  className="prose prose-invert max-w-none text-[#cfc5bb] leading-relaxed space-y-4 [&>p]:leading-relaxed [&>h2]:text-white [&>h2]:text-2xl [&>h2]:font-serif [&>h2]:mt-6 [&>h3]:text-[#c8956c] [&>h3]:text-xl [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:list-decimal [&>ol]:pl-6 [&>img]:rounded-lg [&>img]:my-4"
-                  dangerouslySetInnerHTML={{ __html: selectedBlog.content }}
+                  className="blog-article-content max-w-none text-[#f3ede6] leading-relaxed space-y-4"
+                  dangerouslySetInnerHTML={{ __html: formatBlogContent(selectedBlog.content) }}
                 />
               ) : (
                 <p className="text-gray-400">Full article content not available.</p>
@@ -287,10 +307,10 @@ const Blog = () => {
 
             {/* Modal Footer */}
             <div className="p-6 bg-[#161210] border-t border-[#2c241c] flex items-center justify-between">
-              <span className="text-xs text-gray-400">Hind Import Export International (HIEIL)</span>
+              <span className="text-xs text-[#b5aaa0]">Hind Import Export International (HIEIL)</span>
               <button 
                 onClick={() => setSelectedBlog(null)}
-                className="px-6 py-2 rounded-lg bg-[#c8956c] hover:bg-[#b07d56] text-[#15110F] font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                className="px-6 py-2 rounded-lg bg-[#c8956c] hover:bg-[#b07d56] text-[#15110F] font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
               >
                 Close Article
               </button>
